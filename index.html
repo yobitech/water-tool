@@ -52,14 +52,14 @@
         <div class="col-md-5">
           <h2>Water Demand</h2>
           <p>Change the parameters to see how it affects water demand!</p>
-          <div class="input-group">
-            <span class="input-group-addon" id="drip=irrigation">Drip irrigation</span>
-            <input type="text" class="form-control" placeholder="20%" aria-describedby="drip-irrigation">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button">Update!</button>
-            </span>
+<!--           <div class="input-group">
+            <span class="input-group-addon" id="drip-irrigation">Drip irrigation</span>
+            <input type="text" class="form-control" placeholder="0%" aria-describedby="drip-irrigation"> -->
+            <!-- <span class="input-group-btn"> -->
+              <button class="btn btn-default" type="button" id='drip-update'>Add drip irrigation</button>
+            <!-- </span> -->
           </div>
-          <div class="input-group">
+          <!-- <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Something else</span>
             <input type="text" class="form-control" placeholder="Initial value" aria-describedby="basic-addon1">
             <span class="input-group-btn">
@@ -72,7 +72,7 @@
             <span class="input-group-btn">
               <button class="btn btn-default" type="button">Update!</button>
             </span>
-          </div>
+          </div> -->
         </div>
         <!-- <h1>Jumbotron heading</h1>
         <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
@@ -115,5 +115,6 @@
   </body>
   <script src="dist/js/jquery.js"></script>
   <script src="http://d3js.org/d3.v3.js"></script>
+  <script src="dist/js/graph.js"></script>
   <script src="dist/js/app.js"></script>
 </html>
