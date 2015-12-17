@@ -8,9 +8,14 @@ function exp_mult(N, e, init) {
     return tmp
 }
 
-var data = [ { label: "Original demand",
+var data = [ { label: "Base",
                x: Array.apply(null, {length: N}).map(Number.call, Number), 
                y: exp_mult(N, 1.05, 1)}, 
+           // { 
+           //      label: "Drip irrigation",
+           //      x: Array.apply(null, {length: N}).map(Number.call, Number), 
+           //      y: exp_mult(N, 1.05, 1).map(function(n) { return n * 0.65; })
+           //  }
              // { label: "Data Set 2", 
              //   x: [0, 1, 2, 3, 4], 
              //   y: [0, 1, 4, 9, 16] } 
