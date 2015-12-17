@@ -52,11 +52,61 @@
         <div class="col-md-5">
           <h2>Water Demand</h2>
           <p>Change the parameters to see how it affects water demand!</p>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>% Drip irrigation</th>
+                <th>% Flood irrigation</th>
+                <th>% Rain fed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">0</th>
+                <td>5</td>
+                <td>30</td>
+                <td>65</td>
+              </tr>
+<!--               <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr> -->
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><input type='number' name='input-year' id='input-year' class='form-control' placeholder='5'></th>
+                <td><input type='number' name='input-drip' id='input-drip' class='form-control' placeholder='10'></td>
+                <td><input type='number' name='input-flood' id='input-flood' class='form-control' placeholder='' disabled></td>
+                <td><input type='number' name='input-rain' id='input-rain' class='form-control' placeholder='65' disabled></td>
+              </tr>
+            </tfoot>
+          </table>
+          <button class='btn btn-primary' id='drip-update'>Add new policy</button>
+
+
+
+<!--           <div class="input-group">
+            <span class="input-group-addon" id="drip-irrigation">Drip irrigation</span>
+            <input type="text" class="form-control" placeholder="5%" aria-describedby="drip-irrigation">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" id='drip-update'>Update</button>
+            </span>
+          </div> -->
 <!--           <div class="input-group">
             <span class="input-group-addon" id="drip-irrigation">Drip irrigation</span>
             <input type="text" class="form-control" placeholder="0%" aria-describedby="drip-irrigation"> -->
             <!-- <span class="input-group-btn"> -->
-              <button class="btn btn-default" type="button" id='drip-update'>Add drip irrigation</button>
+              <!-- <button class="btn btn-default" type="button" id='drip-update'>Add drip irrigation</button> -->
             <!-- </span> -->
           </div>
           <!-- <div class="input-group">
