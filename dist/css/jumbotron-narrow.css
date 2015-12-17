@@ -32,7 +32,7 @@ body {
 }
 
 /* Customize container */
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
   .container {
     max-width: 730px;
   }
@@ -40,7 +40,7 @@ body {
 .container-narrow > hr {
   margin: 30px 0;
 }
-
+*/
 /* Main marketing message and sign up button */
 .jumbotron {
   text-align: center;
@@ -49,6 +49,9 @@ body {
 .jumbotron .btn {
   padding: 14px 24px;
   font-size: 21px;
+}
+#graph {
+  margin-bottom: 10px;
 }
 
 /* Supporting marketing content */
