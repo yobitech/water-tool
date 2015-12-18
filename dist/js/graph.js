@@ -91,9 +91,9 @@ function d3_xy_chart() {
                 .range([innerheight, 0])
                 // .domain([ d3.min(datasets, function(d) { return d3.min(d.y); }),
                 // .domain([ d3.min(datasets, function(d) { return d3.min(d.y)-10000; }),
-                .domain([ d3.min(datasets, function(d) { return 0; }),
+                .domain([ d3.min(datasets, function(d) { return d3.max(d.y)-0.1; }),
                 // .domain([ d3.min(zeros),
-                          d3.max(datasets, function(d) { return d3.max(d.y)+1; }) ]) ;
+                          d3.max(datasets, function(d) { return d3.max(d.y)+0.1; }) ]) ;
 
             var color_scale = d3.scale.category10()
                 .domain(d3.range(datasets.length)) ;
