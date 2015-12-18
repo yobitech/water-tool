@@ -43,25 +43,6 @@ $('#drip-update').click(function() {
 
         inputs.push([year, drip]);
 
-        data.push({
-            label: 'Drip('+year+','+drip+')',
-            x: base,
-            y: calc_drip_inputs(inputs)
-        });
-
-        // redraw the graph
-         $("#graph").html("");
-
-        var xy_chart = d3_xy_chart()
-            // .width(960)
-            // .height(500)
-            .width(580)
-            .height(435)
-            .xlabel("Time (years)")
-            .ylabel("Water demand (mcm3)") ;
-        var svg = d3.select("#graph").append("svg")
-            .datum(data)
-            .call(xy_chart) ;
     }
 
 
@@ -70,6 +51,34 @@ $('#drip-update').click(function() {
    
 
 });
+
+$('#plot-update').click(function() {
+
+    if (data.length > 1) {
+        data.splice(1, 1);
+    }
+
+    data.push({
+        label: 'Policy',
+        x: base,
+        y: calc_drip_inputs(inputs)
+    });
+
+    // redraw the graph
+     $("#graph").html("");
+
+    var xy_chart = d3_xy_chart()
+        // .width(960)
+        // .height(500)
+        .width(580)
+        .height(435)
+        .xlabel("Time (years)")
+        .ylabel("Water demand (mcm3)") ;
+    var svg = d3.select("#graph").append("svg")
+        .datum(data)
+        .call(xy_chart) ;
+
+})
 
 
 function calc_drip_inputs(inputs) {
@@ -82,15 +91,15 @@ function calc_drip_inputs(inputs) {
     for (var i = 0; i < inputs.length; i++) {
 
         var year_diff = (i == inputs.length - 1) ? (15-inputs[i][0]) : (inputs[i+1][0] - inputs[i][0]);
-        var drip_val = Number(inputs[i][1]);
-        console.log(year_diff, drip_val);
-        console.log(repeated_array( year_diff, drip_val ));
+        var drip_val = calc_drip(inputs[i][1]);
+        // console.log(year_diff, drip_val);
+        // console.log(repeated_array( year_diff, drip_val ));
         ret = ret.concat(repeated_array( year_diff, drip_val ));
-        console.log(ret);
+        // console.log(ret);
 
     }
 
-    console.log(ret);
+    // console.log(ret);
     return ret;
 
 }
