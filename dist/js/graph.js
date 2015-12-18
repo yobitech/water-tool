@@ -3,10 +3,11 @@ var base = Array.apply(null, {length: N}).map(Number.call, Number);
 var ones = repeated_array(N, 1);
 var zeros = repeated_array(N, 0);
 
-var inputs = {
-    'years': [0],
-    'drips': [5]
-}
+// var inputs = {
+//     years: [0],
+//     drips: [5]
+// }
+var inputs = [[0,5]];
 
 function repeated_array(n, v) {
     return Array.apply(null, Array(n)).map(Number.prototype.valueOf,v);
