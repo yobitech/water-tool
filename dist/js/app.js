@@ -90,11 +90,11 @@ function calc_drip_inputs(inputs) {
     // create series of arrays
     for (var i = 0; i < inputs.length; i++) {
 
-        console.log(inputs[i], inputs[i+1]);
+        // console.log(inputs[i], inputs[i+1]);
 
-        var year_diff = (i == inputs.length - 1) ? (15-inputs[i][0]) : (inputs[i+1][0] - inputs[i][0]);
+        var year_diff = (i == inputs.length - 1) ? (16-inputs[i][0]) : (inputs[i+1][0] - inputs[i][0]);
         var drip_val = calc_drip(inputs[i][1]);
-        console.log(year_diff, drip_val);
+        // console.log(year_diff, drip_val);
         // console.log(repeated_array( year_diff, drip_val ));
         ret = ret.concat(repeated_array( year_diff, drip_val ));
         // console.log(ret);
