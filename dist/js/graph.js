@@ -1,4 +1,16 @@
-var N = 11;
+var N = 16;
+var base = Array.apply(null, {length: N}).map(Number.call, Number);
+var ones = repeated_array(N, 1);
+var zeros = repeated_array(N, 0);
+
+var inputs = {
+    'years': [0],
+    'drips': [5]
+}
+
+function repeated_array(n, v) {
+    return Array.apply(null, Array(n)).map(Number.prototype.valueOf,v);
+}
 
 function exp_mult(N, e, init) {
     var tmp = [init];
@@ -8,9 +20,24 @@ function exp_mult(N, e, init) {
     return tmp
 }
 
-var data = [ { label: "Base",
-               x: Array.apply(null, {length: N}).map(Number.call, Number), 
-               y: exp_mult(N, 1.05, 1)}, 
+function calc_drip(pd) {
+    return (1440*(1-pd/100)*750 + 1440*(pd/100)*525 + 1440*0.65) / 1000000;
+//     1440*[1 - pct of drip]*750 + 
+// 1440*[pct of drip]*525 +
+// 1440*[.65 which is rain-fed] =
+}
+
+var data = [ 
+            // { label: "Base",
+            //    x: base, 
+            //    y: exp_mult(N, 1.05, 1)},
+            { label: 'Base', 
+                x: base,
+                // y: exp_mult(N, 1.05, calc_drip(5))
+                y: ones.map(function (x) {return calc_drip(5)*x})
+                // y: base.map(function (x) {return calc_drip(5)*x})
+
+            } 
            // { 
            //      label: "Drip irrigation",
            //      x: Array.apply(null, {length: N}).map(Number.call, Number), 
@@ -50,13 +77,17 @@ function d3_xy_chart() {
             
             var x_scale = d3.scale.linear()
                 .range([0, innerwidth])
+                // .domain(d3.min(zeros), d3.max(0))
                 .domain([ d3.min(datasets, function(d) { return d3.min(d.x); }), 
+                // .domain([ d3.min(ze), 
                           d3.max(datasets, function(d) { return d3.max(d.x); }) ]) ;
             
             var y_scale = d3.scale.linear()
                 .range([innerheight, 0])
-                .domain([ d3.min(datasets, function(d) { return d3.min(d.y); }),
-                          d3.max(datasets, function(d) { return d3.max(d.y); }) ]) ;
+                // .domain([ d3.min(datasets, function(d) { return d3.min(d.y); }),
+                .domain([ d3.min(datasets, function(d) { return 0; }),
+                // .domain([ d3.min(zeros),
+                          d3.max(datasets, function(d) { return d3.max(d.y)+3; }) ]) ;
 
             var color_scale = d3.scale.category10()
                 .domain(d3.range(datasets.length)) ;
