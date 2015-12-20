@@ -3,11 +3,15 @@ var base = Array.apply(null, {length: N}).map(Number.call, Number);
 var ones = repeated_array(N, 1);
 var zeros = repeated_array(N, 0);
 
+var HEIGHT = 300;
+var WIDTH = 500;
+
 // var inputs = {
 //     years: [0],
 //     drips: [5]
 // }
 var inputs = [[0,5]];
+var inputs_supply = [[0,5]];
 
 function repeated_array(n, v) {
     return Array.apply(null, Array(n)).map(Number.prototype.valueOf,v);
@@ -31,41 +35,63 @@ function calc_drip(pd) {
 }
 
 var data = [ 
-            // { label: "Base",
-            //    x: base, 
-            //    y: exp_mult(N, 1.05, 1)},
-            { label: 'Base', 
-                x: base,
-                // y: exp_mult(N, 1.05, calc_drip(5))
-                y: ones.map(function (x) {return calc_drip(5)*x})
-                // y: base.map(function (x) {return calc_drip(5)*x})
+    // { label: "Base",
+    //    x: base, 
+    //    y: exp_mult(N, 1.05, 1)},
+    { label: 'Base', 
+        x: base,
+        // y: exp_mult(N, 1.05, calc_drip(5))
+        y: ones.map(function (x) {return calc_drip(5)*x})
+        // y: base.map(function (x) {return calc_drip(5)*x})
 
-            } 
-           // { 
-           //      label: "Drip irrigation",
-           //      x: Array.apply(null, {length: N}).map(Number.call, Number), 
-           //      y: exp_mult(N, 1.05, 1).map(function(n) { return n * 0.65; })
-           //  }
-             // { label: "Data Set 2", 
-             //   x: [0, 1, 2, 3, 4], 
-             //   y: [0, 1, 4, 9, 16] } 
-           ] ;
+    } 
+   // { 
+   //      label: "Drip irrigation",
+   //      x: Array.apply(null, {length: N}).map(Number.call, Number), 
+   //      y: exp_mult(N, 1.05, 1).map(function(n) { return n * 0.65; })
+   //  }
+     // { label: "Data Set 2", 
+     //   x: [0, 1, 2, 3, 4], 
+     //   y: [0, 1, 4, 9, 16] } 
+];
+
+var data_supply = [
+
+
+    { label: 'Base', 
+        x: base,
+        y: ones.map(function (x) {return calc_drip(5)*x})
+    }
+
+];
+
+
 var xy_chart = d3_xy_chart()
     // .width(960)
     // .height(500)
     // .width(580)
     // .height(435)
-    .width(500)
-    .height(300)
+    .width(WIDTH)
+    .height(HEIGHT)
     .xlabel("Time (years)")
     .ylabel("Water demand (mcm3)") ;
 var svg = d3.select("#graph-demand").append("svg")
     .datum(data)
     .call(xy_chart) ;
 
-var svg = d3.select("#graph-supply").append("svg")
-    .datum(data)
-    .call(xy_chart) ;
+
+var xy_chart_supply = d3_xy_chart()
+    // .width(960)
+    // .height(500)
+    // .width(580)
+    // .height(435)
+    .width(WIDTH)
+    .height(HEIGHT)
+    .xlabel("Time (years)")
+    .ylabel("Water supply (mcm3)") ;
+var svg_supply = d3.select("#graph-supply").append("svg")
+    .datum(data_supply)
+    .call(xy_chart_supply) ;
 
 function d3_xy_chart() {
     // var width = 640,  
