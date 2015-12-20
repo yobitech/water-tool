@@ -48,104 +48,87 @@
       </div>
 
       <div class="container">
-        <div class="col-md-7" id="graph"></div>
-        <div class="col-md-5">
-          <h2>Water Demand</h2>
-          <p>Change the parameters to see how it affects water demand!</p>
-
-          <table class="table" id='input-table'>
-            <thead>
-              <tr>
-                <th>Year</th>
-                <th>% Drip irrigation</th>
-                <th>% Flood irrigation</th>
-                <th>% Rain fed</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">0</th>
-                <td>5</td>
-                <td>30</td>
-                <td>65</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td><input type='number' name='input-year' id='input-year' class='form-control' placeholder='5'></th>
-                <td><input type='number' name='input-drip' id='input-drip' class='form-control' placeholder='10'></td>
-                <td><input type='number' name='input-flood' id='input-flood' class='form-control' placeholder='' disabled></td>
-                <td><input type='number' name='input-rain' id='input-rain' class='form-control' placeholder='' disabled></td>
-              </tr>
-            </tfoot>
-          </table>
-          <button class='btn btn-primary' id='drip-update'>Add new policy</button>
-          <button class='btn btn-primary' id='plot-update'>Plot policy</button>
 
 
+        <div class="col-md-6" id="col-demand">
+          
+          <div id="graph-demand"></div>
+          <div>
+            <h4>Water Demand</h4>
+            <p>Change the parameters to see how it affects water demand!</p>
 
-<!--           <div class="input-group">
-            <span class="input-group-addon" id="drip-irrigation">Drip irrigation</span>
-            <input type="text" class="form-control" placeholder="5%" aria-describedby="drip-irrigation">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" id='drip-update'>Update</button>
-            </span>
-          </div> -->
-<!--           <div class="input-group">
-            <span class="input-group-addon" id="drip-irrigation">Drip irrigation</span>
-            <input type="text" class="form-control" placeholder="0%" aria-describedby="drip-irrigation"> -->
-            <!-- <span class="input-group-btn"> -->
-              <!-- <button class="btn btn-default" type="button" id='drip-update'>Add drip irrigation</button> -->
-            <!-- </span> -->
-          <!-- </div> -->
-          <!-- <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Something else</span>
-            <input type="text" class="form-control" placeholder="Initial value" aria-describedby="basic-addon1">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button">Update!</button>
-            </span>
+            <table class="table" id='input-table'>
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>% Drip</th>
+                  <th>% Flood</th>
+                  <th>% Rain fed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">0</th>
+                  <td>5</td>
+                  <td>30</td>
+                  <td>65</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td><input type='number' name='input-year' id='input-year' class='form-control' placeholder='5'></th>
+                  <td><input type='number' name='input-drip' id='input-drip' class='form-control' placeholder='10'></td>
+                  <td><input type='number' name='input-flood' id='input-flood' class='form-control' placeholder='' disabled></td>
+                  <td><input type='number' name='input-rain' id='input-rain' class='form-control' placeholder='' disabled></td>
+                </tr>
+              </tfoot>
+            </table>
+            <button class='btn btn-primary' id='drip-update'>Add new policy</button>
+            <button class='btn btn-primary' id='plot-update'>Plot policy</button>
           </div>
-          <div class="input-group">
-            <span class="input-group-addon" id="basic-addon2">Something else</span>
-            <input type="text" class="form-control" placeholder="Initial value" aria-describedby="basic-addon2">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button">Update!</button>
-            </span>
-          </div> -->
         </div>
-        <!-- <h1>Jumbotron heading</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p> -->
+
+
+
+        <div class="col-md-6" id='col-supply'>
+          
+
+          <div id="graph-supply"></div>
+          <div>
+            <h4>Water Supply</h4>
+            <p>Change the parameters to see how it affects water demand!</p>
+
+            <table class="table" id='input-table'>
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>% Drip</th>
+                  <th>% Flood</th>
+                  <th>% Rain fed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">0</td>
+                  <td>5</td>
+                  <td>30</td>
+                  <td>65</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td><input type='number' name='input-year' id='input-year' class='form-control' placeholder='5'></th>
+                  <td><input type='number' name='input-drip' id='input-drip' class='form-control' placeholder='10'></td>
+                  <td><input type='number' name='input-flood' id='input-flood' class='form-control' placeholder='' disabled></td>
+                  <td><input type='number' name='input-rain' id='input-rain' class='form-control' placeholder='' disabled></td>
+                </tr>
+              </tfoot>
+            </table>
+            <button class='btn btn-primary' id='drip-update'>Add new policy</button>
+            <button class='btn btn-primary' id='plot-update'>Plot policy</button>
+          </div>
+        </div>
       </div>
-
-     <!--  <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
-
-        <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
-      </div> -->
-
-<!--       <footer class="footer">
-        <p>Designed by Joy Ming.</p>
-      </footer> -->
-
     </div> <!-- /container -->
 
 

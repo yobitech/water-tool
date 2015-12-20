@@ -55,11 +55,15 @@ var xy_chart = d3_xy_chart()
     // .height(500)
     // .width(580)
     // .height(435)
-    .width(580)
-    .height(435)
+    .width(500)
+    .height(300)
     .xlabel("Time (years)")
     .ylabel("Water demand (mcm3)") ;
-var svg = d3.select("#graph").append("svg")
+var svg = d3.select("#graph-demand").append("svg")
+    .datum(data)
+    .call(xy_chart) ;
+
+var svg = d3.select("#graph-supply").append("svg")
     .datum(data)
     .call(xy_chart) ;
 
