@@ -45,11 +45,6 @@ $('#drip-update').click(function() {
 
     }
 
-
-    // data.push();
-
-   
-
 });
 
 $('#plot-update').click(function() {
@@ -65,20 +60,96 @@ $('#plot-update').click(function() {
     });
 
     // redraw the graph
-     $("#graph").html("");
+     $("#graph-demand").html("");
 
     var xy_chart = d3_xy_chart()
         // .width(960)
         // .height(500)
-        .width(580)
-        .height(435)
+        .width(WIDTH)
+        .height(HEIGHT)
         .xlabel("Time (years)")
         .ylabel("Water demand (mcm3)") ;
-    var svg = d3.select("#graph").append("svg")
+    var svg = d3.select("#graph-demand").append("svg")
         .datum(data)
         .call(xy_chart) ;
 
-})
+});
+
+$('#rainfall-update').click(function() {
+
+    // get the inputs
+    var year = $('#input-year-supply').val();
+    var drip = $('#input-drip-supply').val();
+
+    // console.log(year, drip);
+
+    // check if values are null
+    if (year == '' || drip == '') {
+        alert("Please fill in necessary values!")
+    }
+    else if (year > 15) {
+        alert("Year must be less than 15.")
+    }
+    else if (drip > 35) {
+        alert("Drip must be less than 35.")
+    }
+    else {
+
+        // clear everything from the form
+        $('#input-year-supply').val('');
+        $('#input-drip-supply').val('');
+
+        // put it in the html table
+        $('#input-table-supply').find('tbody')
+            .append($('<tr>')
+                .append($('<th>')
+                    .text(year)
+                )
+                .append($('<td>')
+                    .text(drip)
+                )
+                .append($('<td>')
+                    .text(100-drip)
+                )
+                .append($('<td>')
+                    .text(65)
+                )
+            );
+
+        // calculate the new values
+        inputs_supply.push([Number(year), Number(drip)]);
+
+    }
+
+});
+
+$('#plot-update-supply').click(function() {
+
+    if (data_supply.length > 1) {
+        data_supply.splice(1, 1);
+    }
+
+    data_supply.push({
+        label: 'Policy',
+        x: base,
+        y: calc_drip_inputs(inputs_supply)
+    });
+
+    // redraw the graph
+     $("#graph-supply").html("");
+
+    var xy_chart = d3_xy_chart()
+        // .width(960)
+        // .height(500)
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Water supply (mcm3)") ;
+    var svg = d3.select("#graph-supply").append("svg")
+        .datum(data_supply)
+        .call(xy_chart_supply) ;
+
+});
 
 
 function calc_drip_inputs(inputs) {
