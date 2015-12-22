@@ -3,8 +3,10 @@ var base = Array.apply(null, {length: N}).map(Number.call, Number);
 var ones = repeated_array(N, 1);
 var zeros = repeated_array(N, 0);
 
-var HEIGHT = 300;
-var WIDTH = 500;
+// var HEIGHT = 300;
+// var WIDTH = 500;
+var HEIGHT = 435;
+var WIDTH = 580;
 
 // var inputs = {
 //     years: [0],
@@ -25,13 +27,22 @@ function exp_mult(N, e, init) {
     return tmp
 }
 
-function calc_drip(pd) {
-    return (1440*(1-pd/100)*750 + 1440*(pd/100)*525 + 1440*0.65) / 1000000;
-        // return (1440*(1-pd/100)*750 + 1440*(pd/100)*525 + 1440*0.65);
+// function calc_drip(pd) {
+//     return (1440*(1-pd/100)*750 + 1440*(pd/100)*525 + 1440*0.65) / 1000000;
+//         // return (1440*(1-pd/100)*750 + 1440*(pd/100)*525 + 1440*0.65);
 
-//     1440*[1 - pct of drip]*750 + 
-// 1440*[pct of drip]*525 +
-// 1440*[.65 which is rain-fed] =
+// //     1440*[1 - pct of drip]*750 + 
+// // 1440*[pct of drip]*525 +
+// // 1440*[.65 which is rain-fed] =
+// }
+
+function calc_drip(pd, yr) {
+    // console.log(pd, yr, 132*Math.pow(1.0075,yr)*((1-pd/100)+pd/100*.6)+12*Math.pow(1.035,yr)/1000000);
+    return 132*Math.pow(1.0075,yr)*((1-pd/100)+pd/100*.6)+12*Math.pow(1.035,yr)/1000000;
+}
+
+function calc_supply(yr) {
+    return 216*Math.pow(0.99,yr);
 }
 
 var data = [ 
@@ -40,10 +51,17 @@ var data = [
     //    y: exp_mult(N, 1.05, 1)},
     { label: 'Base', 
         x: base,
-        // y: exp_mult(N, 1.05, calc_drip(5))
-        y: ones.map(function (x) {return calc_drip(5)*x})
+        // y: exp_mult(N, 1.05, calc_drip(5,1))
+        y: base.map(function (x) {
+            // console.log(5, x, calc_drip(5,x))
+            return calc_drip(5,x)
+        })
         // y: base.map(function (x) {return calc_drip(5)*x})
 
+    }, 
+    { label: 'Supply', 
+        x: base,
+        y: base.map(function (x) {return calc_supply(x)})
     } 
    // { 
    //      label: "Drip irrigation",
@@ -60,7 +78,7 @@ var data_supply = [
 
     { label: 'Base', 
         x: base,
-        y: ones.map(function (x) {return calc_drip(5)*x})
+        y: base.map(function (x) {return calc_supply(5,x)})
     }
 
 ];
@@ -121,9 +139,9 @@ function d3_xy_chart() {
                 .range([innerheight, 0])
                 // .domain([ d3.min(datasets, function(d) { return d3.min(d.y); }),
                 // .domain([ d3.min(datasets, function(d) { return d3.min(d.y)-10000; }),
-                .domain([ d3.min(datasets, function(d) { return d3.max(d.y)-0.1; }),
+                .domain([ d3.min(datasets, function(d) { return d3.min(d.y)-15; }),
                 // .domain([ d3.min(zeros),
-                          d3.max(datasets, function(d) { return d3.max(d.y)+0.1; }) ]) ;
+                          d3.max(datasets, function(d) { return d3.max(d.y)+15; }) ]) ;
 
             var color_scale = d3.scale.category10()
                 .domain(d3.range(datasets.length)) ;
