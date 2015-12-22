@@ -3,8 +3,10 @@ var base = Array.apply(null, {length: N}).map(Number.call, Number);
 var ones = repeated_array(N, 1);
 var zeros = repeated_array(N, 0);
 
-var HEIGHT = 300;
-var WIDTH = 500;
+// var HEIGHT = 300;
+// var WIDTH = 500;
+var HEIGHT = 435;
+var WIDTH = 580;
 
 // var inputs = {
 //     years: [0],
@@ -47,7 +49,7 @@ var data = [
     // { label: "Base",
     //    x: base, 
     //    y: exp_mult(N, 1.05, 1)},
-    { label: 'Base demand', 
+    { label: 'Base', 
         x: base,
         // y: exp_mult(N, 1.05, calc_drip(5,1))
         y: base.map(function (x) {

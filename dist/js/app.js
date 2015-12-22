@@ -49,8 +49,8 @@ $('#drip-update').click(function() {
 
 $('#plot-update').click(function() {
 
-    if (data.length > 1) {
-        data.splice(1, 1);
+    if (data.length > 2) {
+        data.splice(2, 1);
     }
 
     data.push({
@@ -156,23 +156,32 @@ function calc_drip_inputs(inputs) {
 
     // sort the arrays
     inputs.sort(Comparator);
+    console.log(inputs);
     var ret = [];
 
     // create series of arrays
     for (var i = 0; i < inputs.length; i++) {
 
-        // console.log(inputs[i], inputs[i+1]);
 
-        var year_diff = (i == inputs.length - 1) ? (16-inputs[i][0]) : (inputs[i+1][0] - inputs[i][0]);
-        var drip_val = calc_drip(inputs[i][1]);
-        // console.log(year_diff, drip_val);
+
+        // console.log(inputs[i], inputs[i+1]);
+        var year_in = Number(inputs[i][0]);
+
+        var year_diff = (i == inputs.length - 1) ? (16-year_in) : (inputs[i+1][0] - year_in);
+        var drip_val = Number(inputs[i][1]);
+        // var drip_val = calc_drip(inputs[i][1]);
+        console.log(year_diff, drip_val);
+
+        for (var j = year_in; j < year_in+year_diff; j++) {
+            ret.push(calc_drip(drip_val, j));
+        };
         // console.log(repeated_array( year_diff, drip_val ));
-        ret = ret.concat(repeated_array( year_diff, drip_val ));
+        // ret = ret.concat(repeated_array( year_diff, drip_val ));
         // console.log(ret);
 
     }
 
-    // console.log(ret);
+    console.log(ret);
     return ret;
 
 }

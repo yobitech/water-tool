@@ -50,47 +50,60 @@
       <div class="container">
 
 
-        <div class="col-md-6" id="col-demand">
-          
-          <div id="graph-demand"></div>
-          <div>
-            <h4>Water Demand</h4>
-            <p>Change the parameters to see how it affects water demand!</p>
+        <div id="col-demand">
 
-            <table class="table" id='input-table'>
-              <thead>
-                <tr>
-                  <th>Year</th>
-                  <th>% Drip</th>
-                  <th>% Flood</th>
-                  <th>% Rain fed</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">0</th>
-                  <td>5</td>
-                  <td>30</td>
-                  <td>65</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td><input type='number' name='input-year' id='input-year' class='form-control' placeholder='5'></th>
-                  <td><input type='number' name='input-drip' id='input-drip' class='form-control' placeholder='10'></td>
-                  <td><input type='number' name='input-flood' id='input-flood' class='form-control' placeholder='' disabled></td>
-                  <td><input type='number' name='input-rain' id='input-rain' class='form-control' placeholder='' disabled></td>
-                </tr>
-              </tfoot>
-            </table>
-            <button class='btn btn-primary' id='drip-update'>Add new policy</button>
-            <button class='btn btn-primary' id='plot-update'>Plot policy</button>
+          <div class="col-md-7">
+            
+            <div id="graph-demand"></div>
+
+
           </div>
+          <div class="col-md-5">
+            
+            <div>
+              <h4>Water Demand</h4>
+              <p>Change the parameters to see how it affects water demand!</p>
+
+              <table class="table" id='input-table'>
+                <thead>
+                  <tr>
+                    <th>Year</th>
+                    <th>% Drip</th>
+                    <th>% Flood</th>
+                    <th>% Rain fed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">0</th>
+                    <td>5</td>
+                    <td>30</td>
+                    <td>65</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td><input type='number' name='input-year' id='input-year' class='form-control' placeholder='5'></th>
+                    <td><input type='number' name='input-drip' id='input-drip' class='form-control' placeholder='10'></td>
+                    <td><input type='number' name='input-flood' id='input-flood' class='form-control' placeholder='' disabled></td>
+                    <td><input type='number' name='input-rain' id='input-rain' class='form-control' placeholder='' disabled></td>
+                  </tr>
+                </tfoot>
+              </table>
+              <button class='btn btn-primary' id='drip-update'>Add new policy</button>
+              <button class='btn btn-primary' id='plot-update'>Plot policy</button>
+            </div>
+
+
+          </div>
+          
+          
+
         </div>
 
 
 
-        <div class="col-md-6" id='col-supply'>
+<!--         <div class="col-md-6" id='col-supply'>
           
 
           <div id="graph-supply"></div>
@@ -127,7 +140,7 @@
             <button class='btn btn-primary' id='rainfall-update'>Add new policy</button>
             <button class='btn btn-primary' id='plot-update-supply'>Plot policy</button>
           </div>
-        </div>
+        </div> -->
       </div>
     </div> <!-- /container -->
 
