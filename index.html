@@ -21,6 +21,7 @@
     <!-- Custom styles for this template -->
     <link href="dist/css/jumbotron-narrow.css" rel="stylesheet">
     <link href="dist/css/app.css" rel="stylesheet">
+    <link href="dist/css/bootstrap-slider.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -50,64 +51,113 @@
       <div class="container">
 
 
-        <div id="col-demand">
+        <!-- <div id="col-demand"> -->
 
-          <div class="col-md-7">
-            
-            <div id="graph-demand"></div>
-
-
-          </div>
-          <div class="col-md-5">
-            
-            <div>
-              <h4>Water Demand</h4>
-              <p>Change the parameters to see how it affects water demand!</p>
-
-              <table class="table" id='input-table'>
-                <thead>
-                  <tr>
-                    <th>Year</th>
-                    <th>% Drip</th>
-                    <th>% Flood</th>
-                    <th>% Rain fed</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">0</th>
-                    <td>5</td>
-                    <td>30</td>
-                    <td>65</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td><input type='number' name='input-year' id='input-year' class='form-control' placeholder='5'></th>
-                    <td><input type='number' name='input-drip' id='input-drip' class='form-control' placeholder='10'></td>
-                    <td><input type='number' name='input-flood' id='input-flood' class='form-control' placeholder='' disabled></td>
-                    <td><input type='number' name='input-rain' id='input-rain' class='form-control' placeholder='' disabled></td>
-                  </tr>
-                </tfoot>
-              </table>
-              <button class='btn btn-primary' id='drip-update'>Add new policy</button>
-              <button class='btn btn-primary' id='plot-update'>Plot policy</button>
-            </div>
-
-
-          </div>
+        <div class="col-md-6">
           
-          
+          <!-- <p>GDP</p> -->
+          <div id="graph-demand"></div>
+          <!-- <p>Water usage</p> -->
+          <div id="graph-supply"></div>
+          <div id='viz'></div>
+
 
         </div>
 
+        <div class="col-md-6">
+
+          <div style='padding:20px'></div>
+
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="email">Year:</label>
+              <div class="col-sm-2">
+                <input type="email" class="form-control" id="email" placeholder="2015">
+              </div>
+              <button class='btn btn-primary' id='update-year'>Update</button>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="pwd">Water consumption:</label>
+              <div class="col-sm-2"> 
+                <input type="password" class="form-control" id="pwd" placeholder="30%" disabled>
+              </div>
+              <button class='btn btn-primary' id='update-year' disabled>Update</button>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="pwd">Agricultural split:</label>
+              <div class="col-sm-2"> 
+                <input type="password" class="form-control" id="pwd" placeholder="60%" disabled>
+              </div>
+              <button class='btn btn-primary' id='update-year'>Update</button>
+
+              <div style='padding:10px'></div>
+              <div class='row'>
+                <div class='col-sm-4 control-label'><p>Cotton:</p></div>
+                <div class='col-sm-6'><input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="55"/></div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-4 control-label'><p>Wheat:</p></div>
+                <div class='col-sm-6'><input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="10"/></div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-4 control-label'><p>Mustard:</p></div>
+                <div class='col-sm-6'><input id="ex3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="35"/></div>
+              </div>
 
 
-<!--         <div class="col-md-6" id='col-supply'>
-          
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="pwd">Irrigation split:</label>
+              <div class="col-sm-2"> 
+                <input type="password" class="form-control" id="pwd" placeholder="10%" disabled>
+              </div>
+              <button class='btn btn-primary' id='update-year'>Update</button>
 
-          <div id="graph-supply"></div>
-          <div>
+              <!-- <input id="ex16b" type="text"/> -->
+              <div style='padding:10px'></div>
+              <div class='row'>
+                <div class='col-sm-4 control-label'><p>Drip irrigation:</p></div>
+                <div class='col-sm-6'><input id="ex4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="5"/></div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-4 control-label'><p>Flood irrigation:</p></div>
+                <div class='col-sm-6'><input id="ex5" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="30"/></div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-4 control-label'><p>Rain fed irrigation:</p></div>
+                <div class='col-sm-6'><input id="ex6" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="65"/></div>
+              </div>
+
+            </div>
+          </form>
+
+          <!-- <form class="form-inline" role="form">
+            <div class="form-group">
+              <label for="email"><h4>Year:</h4></label>
+              <input type="email" class="form-control" id="email" placeholder='2015'>
+            </div>
+          </form>
+
+          <form class="form-inline" role="form">
+            <div class="form-group">
+              <label for="email"><h4>Water consumption:</h4></label>
+              <input type="email" class="form-control" id="email" placeholder='30%' disabled>
+            </div>
+          </form> -->
+
+
+
+<!--           <h4>Agricultural split</h4>
+
+
+
+          <h4>Type of irrigation</h4> -->
+
+
+          <!-- <h4>Year: <input type='number' name='input-year-supply' id='input-year-supply' class='form-control' placeholder='5'></h4> -->
+
+
+          <!-- <div>
             <h4>Water Supply</h4>
             <p>Change the parameters to see how it affects water demand!</p>
 
@@ -142,7 +192,7 @@
           </div>
         </div> -->
       </div>
-    </div> <!-- /container -->
+    <!-- </div> /container -->
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -150,6 +200,8 @@
   </body>
   <script src="dist/js/jquery.js"></script>
   <script src="http://d3js.org/d3.v3.js"></script>
+  <script src="dist/js/bootstrap-slider.min.js"></script>
   <script src="dist/js/graph.js"></script>
   <script src="dist/js/app.js"></script>
+  
 </html>

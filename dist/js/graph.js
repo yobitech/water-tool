@@ -2,11 +2,15 @@ var N = 16;
 var base = Array.apply(null, {length: N}).map(Number.call, Number);
 var ones = repeated_array(N, 1);
 var zeros = repeated_array(N, 0);
+var years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
+
+var HEIGHT = 250;
+var WIDTH = 500;
 // var HEIGHT = 300;
 // var WIDTH = 500;
-var HEIGHT = 435;
-var WIDTH = 580;
+// var HEIGHT = 435;
+// var WIDTH = 580;
 
 // var inputs = {
 //     years: [0],
@@ -49,20 +53,22 @@ var data = [
     // { label: "Base",
     //    x: base, 
     //    y: exp_mult(N, 1.05, 1)},
-    { label: 'Base', 
-        x: base,
+    { label: 'GDP', 
+        // x: base,
+        x: years,
+        y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
         // y: exp_mult(N, 1.05, calc_drip(5,1))
-        y: base.map(function (x) {
-            // console.log(5, x, calc_drip(5,x))
-            return calc_drip(5,x)
-        })
+        // y: base.map(function (x) {
+        //     // console.log(5, x, calc_drip(5,x))
+        //     return calc_drip(5,x)
+        // })
         // y: base.map(function (x) {return calc_drip(5)*x})
 
     }, 
-    { label: 'Supply', 
-        x: base,
-        y: base.map(function (x) {return calc_supply(x)})
-    } 
+    // { label: 'Supply', 
+    //     x: base,
+    //     y: base.map(function (x) {return calc_supply(x)})
+    // } 
    // { 
    //      label: "Drip irrigation",
    //      x: Array.apply(null, {length: N}).map(Number.call, Number), 
@@ -77,7 +83,7 @@ var data_supply = [
 
 
     { label: 'Base', 
-        x: base,
+        x: years,
         y: base.map(function (x) {return calc_supply(5,x)})
     }
 
@@ -92,7 +98,7 @@ var xy_chart = d3_xy_chart()
     .width(WIDTH)
     .height(HEIGHT)
     .xlabel("Time (years)")
-    .ylabel("Water demand (mcm3)") ;
+    .ylabel("GDP") ;
 var svg = d3.select("#graph-demand").append("svg")
     .datum(data)
     .call(xy_chart) ;
@@ -255,3 +261,65 @@ function d3_xy_chart() {
 
     return chart;
 }
+
+
+
+
+
+
+
+
+
+        //     var w = 960,
+        //     h = 500
+        //     // create canvas
+        //     var svg = d3.select("#viz").append("svg:svg")
+        //     .attr("class", "chart")
+        //     .attr("width", w)
+        //     .attr("height", h )
+        //     .append("svg:g")
+        //     .attr("transform", "translate(10,470)");
+        //     x = d3.scale.ordinal().rangeRoundBands([0, w-50])
+        //     y = d3.scale.linear().range([0, h-50])
+        //     z = d3.scale.ordinal().range(["darkblue", "blue", "lightblue"])
+        //     console.log("RAW MATRIX---------------------------");
+        // // 4 columns: ID,c1,c2,c3
+        //     var matrix = [
+        //         [ 1,  5871, 8916, 2868],
+        //         [ 2, 10048, 2060, 6171],
+        //         [ 3, 16145, 8090, 8045],
+        //         [ 4,   990,  940, 6907],
+        //         [ 5,   450,  430, 5000]
+        //     ];
+        //     console.log(matrix)
+        //     console.log("REMAP---------------------------");
+        //     var remapped =["c1","c2","c3"].map(function(dat,i){
+        //         return matrix.map(function(d,ii){
+        //             return {x: ii, y: d[i+1] };
+        //         })
+        //     });
+        //     console.log(remapped)
+        //     console.log("LAYOUT---------------------------");
+        //     var stacked = d3.layout.stack()(remapped)
+        //     console.log(stacked)
+        //     x.domain(stacked[0].map(function(d) { return d.x; }));
+        //     y.domain([0, d3.max(stacked[stacked.length - 1], function(d) { return d.y0 + d.y; })]);
+        //     // show the domains of the scales              
+        //     console.log("x.domain(): " + x.domain())
+        //     console.log("y.domain(): " + y.domain())
+        //     console.log("------------------------------------------------------------------");
+        //     // Add a group for each column.
+        //     var valgroup = svg.selectAll("g.valgroup")
+        //     .data(stacked)
+        //     .enter().append("svg:g")
+        //     .attr("class", "valgroup")
+        //     .style("fill", function(d, i) { return z(i); })
+        //     .style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
+        //     // Add a rect for each date.
+        //     var rect = valgroup.selectAll("rect")
+        //     .data(function(d){return d;})
+        //     .enter().append("svg:rect")
+        //     .attr("x", function(d) { return x(d.x); })
+        //     .attr("y", function(d) { return -y(d.y0) - y(d.y); })
+        //     .attr("height", function(d) { return y(d.y); })
+        //     .attr("width", x.rangeBand());

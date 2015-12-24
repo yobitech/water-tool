@@ -181,7 +181,7 @@ function calc_drip_inputs(inputs) {
 
     }
 
-    console.log(ret);
+    // console.log(ret);
     return ret;
 
 }
@@ -191,3 +191,42 @@ function Comparator(a,b) {
     if (a[0] > b[0]) return 1;
     return 0;
 }
+
+
+$('#ex1').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+$('#ex2').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+$('#ex3').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+
+$('#ex4').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+$('#ex5').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+$('#ex6').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+// $("#ex16b").slider({ min: 0, max: 100, value: [10,20,30,60], focus: true });
+// new Slider("#ex16b", { min: 0, max: 10, value: [0, 10], focus: true });
+
+
+
+
