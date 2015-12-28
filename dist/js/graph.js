@@ -30,12 +30,38 @@ function calc_supply(yr) {
     return 216*Math.pow(0.99,yr);
 }
 
+function base_bars(N) {
+    var ret = [];
+    for (var i=0; i<N; i++) {
+        ret.push({'Year': 2015+i, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1})
+    }
+    return ret;
+}
+
+function calc_gdp(ind, agr, lstk) {
+    return 4.45*ind+0.48*(agr+lstk);
+}
+
+function calc_gdp_bars(bars) {
+    var ret = [];
+    for (var i=0; i < bars.length; i++) {
+        ret.push(calc_gdp(bars[i].Industry, bars[i].Agriculture, bars[i].Livestock));
+    }
+    return ret;
+}
+
+var data_bars = base_bars(16);
+
 var data = [ 
     { label: 'GDP', 
         x: years,
-        y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
+        // y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
+        y: calc_gdp_bars(data_bars)
     }, 
 ];
+
+
+// 4.45*[billions of cubic meters of water used for industry] + .48*[billions of cubic meters used for agriculture / livestock] = GDP (in billions of dollars)
 
 // var data_supply = [
 //     { label: 'Base', 
@@ -206,14 +232,7 @@ function d3_xy_chart() {
 // ]
 // var data = [{'State': 'AL', 'Under 5 Years': 310504, '5 to 13 Years': 310504}]
 // 12 for domestic drinking water, 3.5 for livestock, 132 for ag, and like 1 for industry
-var data_bars = [
-    {'Year': 2015, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
-    {'Year': 2016, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
-    {'Year': 2017, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
-    {'Year': 2018, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
-    {'Year': 2019, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
-    {'Year': 2020, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}
-]
+
 
 var xy_bars = d3_xy_bars()
     .width(WIDTH)
