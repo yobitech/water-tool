@@ -37,12 +37,12 @@ var data = [
     }, 
 ];
 
-var data_supply = [
-    { label: 'Base', 
-        x: years,
-        y: base.map(function (x) {return calc_supply(5,x)})
-    }
-];
+// var data_supply = [
+//     { label: 'Base', 
+//         x: years,
+//         y: base.map(function (x) {return calc_supply(5,x)})
+//     }
+// ];
 
 
 var xy_chart = d3_xy_chart()
@@ -196,33 +196,7 @@ function d3_xy_chart() {
     return chart;
 }
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = WIDTH - margin.left - margin.right,
-    height = HEIGHT - margin.top - margin.bottom;
 
-var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1);
-
-var y = d3.scale.linear()
-    .rangeRound([height, 0]);
-
-var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-    .tickFormat(d3.format(".2s"));
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // d3.csv("data.csv", function(error, data) {
   // if (error) throw error;
@@ -232,7 +206,7 @@ var svg = d3.select("body").append("svg")
 // ]
 // var data = [{'State': 'AL', 'Under 5 Years': 310504, '5 to 13 Years': 310504}]
 // 12 for domestic drinking water, 3.5 for livestock, 132 for ag, and like 1 for industry
-var data = [
+var data_bars = [
     {'Year': 2015, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
     {'Year': 2016, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
     {'Year': 2017, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1},
@@ -241,271 +215,179 @@ var data = [
     {'Year': 2020, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}
 ]
 
-// var xy_bars = d3_xy_bars()
-//     .width(WIDTH)
-//     .height(HEIGHT)
-//     .xlabel("Time (years)")
-//     .ylabel("Water supply (mcm3)") ;
-// var svg_bars = d3.select("#graph-supply").append("svg")
-//     .datum(data_bars)
-//     .call(xy_bars) ;
+var xy_bars = d3_xy_bars()
+    .width(WIDTH)
+    .height(HEIGHT)
+    .xlabel("Time (years)")
+    .ylabel("Water supply (mcm3)") ;
+var svg_bars = d3.select("#graph-supply").append("svg")
+    .datum(data_bars)
+    .call(xy_bars) ;
 
-// function d3_xy_bars() {
+function d3_xy_bars() {
     
-//     function chart(selection) {
-//         selection.each(function(datasets) {
+    function chart(selection) {
+        selection.each(function(datasets) {
 
-//             var margin = {top: 20, right: 80, bottom: 30, left: 50}, 
-//                 innerwidth = width - margin.left - margin.right,
-//                 innerheight = height - margin.top - margin.bottom ;
+            var margin = {top: 20, right: 80, bottom: 30, left: 50},
+                innerwidth = width - margin.left - margin.right,
+                innerheight = height - margin.top - margin.bottom;
+
+            var x = d3.scale.ordinal()
+                .rangeRoundBands([0, innerwidth], .1);
+
+            var y = d3.scale.linear()
+                .rangeRound([innerheight, 0]);
+
+            var color = d3.scale.ordinal()
+                .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(d3.format(".2s"));
+
+            var x_grid = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .tickSize(-innerheight)
+                .tickFormat("") ;
+
+            var y_grid = d3.svg.axis()
+                .scale(y)
+                .orient("left") 
+                .tickSize(-innerwidth)
+                .tickFormat("") ;
+
+            // var draw_line = d3.svg.line()
+            //     .interpolate("basis")
+            //     .x(function(d) { return x_scale(d[0]); })
+            //     .y(function(d) { return y_scale(d[1]); }) ;
+
+
+            color.domain(d3.keys(datasets[0]).filter(function(key) { return key !== "Year"; }));
+
+            datasets.forEach(function(d) {
+                var y0 = 0;
+                d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
+                d.total = d.ages[d.ages.length - 1].y1;
+                // console.log(d, d.ages, d.total);
+            });
+
+            datasets.sort(function(a, b) { return b.total - a.total; });
+
+            x.domain(datasets.map(function(d) { return d.Year; }));
+            y.domain([0, d3.max(datasets, function(d) { return d.total+50; })]);
+
+
+            //
+
+            var svg = d3.select(this)
+                .attr("width", width)
+                .attr("height", height)
+              .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            svg.append("g")
+                .attr("class", "x grid")
+                .attr("transform", "translate(0," + innerheight + ")")
+                .call(x_grid) ;
+
+            svg.append("g")
+                .attr("class", "y grid")
+                .call(y_grid) ;
+
             
-//             // var x_scale = d3.scale.linear()
-//             //     .range([0, innerwidth])
-//             //     .domain([ d3.min(datasets, function(d) { return d3.min(d.x); }), 
-//             //               d3.max(datasets, function(d) { return d3.max(d.x); }) ]) ;
-            
-//             // var y_scale = d3.scale.linear()
-//             //     .range([innerheight, 0])
-//             //     .domain([ d3.min(datasets, function(d) { return d3.min(d.y)-15; }),
-//             //               d3.max(datasets, function(d) { return d3.max(d.y)+15; }) ]) ;
+              
 
-//             // var color_scale = d3.scale.category10()
-//             //     .domain(d3.range(datasets.length)) ;
+              var state = svg.selectAll(".state")
+                  .data(datasets)
+                .enter().append("g")
+                  .attr("class", "g")
+                  .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; });
 
-//             var x = d3.scale.ordinal()
-//                 .rangeRoundBands([0, width], .1);
+              state.selectAll("rect")
+                  .data(function(d) { return d.ages; })
+                .enter().append("rect")
+                  .attr("width", x.rangeBand())
+                  .attr("y", function(d) { return y(d.y1); })
+                  .attr("height", function(d) { return y(d.y0) - y(d.y1); })
+                  .style("fill", function(d) { return color(d.name); });
 
-//             var y = d3.scale.linear()
-//                 .rangeRound([height, 0]);
+              var legend = svg.selectAll(".legend")
+                  .data(color.domain().slice().reverse())
+                .enter().append("g")
+                  .attr("class", "legend")
+                  .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-//             var color = d3.scale.ordinal()
-//                 .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+                  svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + innerheight + ")")
+                  .call(xAxis)
+                  .append("text")
+                    .attr("dy", "-.71em")
+                    .attr("x", innerwidth)
+                    .style("text-anchor", "end")
+                    .text(xlabel) ;
 
+              svg.append("g")
+                  .attr("class", "y axis")
+                  .call(yAxis)
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 6)
+                  .attr("dy", ".71em")
+                  .style("text-anchor", "end")
+                  .text(ylabel);
 
-//             var x_axis = d3.svg.axis()
-//                 .scale(x)
-//                 .orient("bottom") ;
+              legend.append("rect")
+                  .attr("x", innerwidth - 18)
+                  .attr("width", 18)
+                  .attr("height", 18)
+                  .style("fill", color);
 
-//             var y_axis = d3.svg.axis()
-//                 .scale(y)
-//                 .orient("left") ;
+              legend.append("text")
+                  .attr("x", innerwidth - 24)
+                  .attr("y", 9)
+                  .attr("dy", ".35em")
+                  .style("text-anchor", "end")
+                  .text(function(d) { return d; });
 
-//             var x_grid = d3.svg.axis()
-//                 .scale(x)
-//                 .orient("bottom")
-//                 .tickSize(-innerheight)
-//                 .tickFormat("") ;
+        }) ;
+    }
 
-//             var y_grid = d3.svg.axis()
-//                 .scale(y)
-//                 .orient("left") 
-//                 .tickSize(-innerwidth)
-//                 .tickFormat("") ;
+    chart.width = function(value) {
+        if (!arguments.length) return width;
+        width = value;
+        return chart;
+    };
 
-//             // var draw_line = d3.svg.line()
-//             //     .interpolate("basis")
-//             //     .x(function(d) { return x_scale(d[0]); })
-//             //     .y(function(d) { return y_scale(d[1]); }) ;
+    chart.height = function(value) {
+        if (!arguments.length) return height;
+        height = value;
+        return chart;
+    };
 
-//             var svg = d3.select(this)
-//                 .attr("width", width)
-//                 .attr("height", height)
-//                 .append("g")
-//                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")") ;
-            
+    chart.xlabel = function(value) {
+        if(!arguments.length) return xlabel ;
+        xlabel = value ;
+        return chart ;
+    } ;
 
-//             // start appending shapes for axes
-//             svg.append("g")
-//                 .attr("class", "x grid")
-//                 .attr("transform", "translate(0," + innerheight + ")")
-//                 .call(x_grid) ;
+    chart.ylabel = function(value) {
+        if(!arguments.length) return ylabel ;
+        ylabel = value ;
+        return chart ;
+    } ;
 
-//             svg.append("g")
-//                 .attr("class", "y grid")
-//                 .call(y_grid) ;
+    return chart;
+}
 
-//             svg.append("g")
-//                 .attr("class", "x axis")
-//                 .attr("transform", "translate(0," + innerheight + ")") 
-//                 .call(x_axis)
-//                 .append("text")
-//                 .attr("dy", "-.71em")
-//                 .attr("x", innerwidth)
-//                 .style("text-anchor", "end")
-//                 .text(xlabel) ;
-            
-//             svg.append("g")
-//                 .attr("class", "y axis")
-//                 .call(y_axis)
-//                 .append("text")
-//                 .attr("transform", "rotate(-90)")
-//                 .attr("y", 6)
-//                 .attr("dy", "0.71em")
-//                 .style("text-anchor", "end")
-//                 .text(ylabel) ;
-
-//             // get the data!
-
-//             color.domain(d3.keys(data[0]).filter(function(key) { console.log(key); return key !== "Year"; }));
-
-//             datasets.forEach(function(d) {
-//                 var y0 = 0;
-//                 d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
-//                 d.total = d.ages[d.ages.length - 1].y1;
-//                 // console.log(d, d.ages, d.total);
-//             });
-
-//             datasets.sort(function(a, b) { return b.total - a.total; });
-
-//             x.domain(data.map(function(d) { return d.Year; }));
-//             y.domain([0, d3.max(data, function(d) { return d.total+50; })]);
-
-//             // append data 
-
-//             var state = svg.selectAll(".state")
-//               .data(datasets)
-//             .enter().append("g")
-//               .attr("class", "g")
-//               .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; });
-
-//             state.selectAll("rect")
-//               .data(function(d) { return d.ages; })
-//             .enter().append("rect")
-//               .attr("width", x.rangeBand())
-//               .attr("y", function(d) { return y(d.y1); })
-//               .attr("height", function(d) { return y(d.y0) - y(d.y1); })
-//               .style("fill", function(d) { return color(d.name); });
-
-//             var legend = svg.selectAll(".legend")
-//               .data(color.domain().slice().reverse())
-//             .enter().append("g")
-//               .attr("class", "legend")
-//               .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-//             legend.append("rect")
-//               .attr("x", width - 18)
-//               .attr("width", 18)
-//               .attr("height", 18)
-//               .style("fill", color);
-
-//             legend.append("text")
-//               .attr("x", width - 24)
-//               .attr("y", 9)
-//               .attr("dy", ".35em")
-//               .style("text-anchor", "end")
-//               .text(function(d) { return d; });
-
-//             // var data_lines = svg.selectAll(".d3_xy_chart_line")
-//             //     .data(datasets.map(function(d) {return d3.zip(d.x, d.y);}))
-//             //     .enter().append("g")
-//             //     .attr("class", "d3_xy_chart_line") ;
-            
-//             // data_lines.append("path")
-//             //     .attr("class", "line")
-//             //     .attr("d", function(d) {return draw_line(d); })
-//             //     .attr("stroke", function(_, i) {return color_scale(i);}) ;
-            
-//             // data_lines.append("text")
-//             //     .datum(function(d, i) { return {name: datasets[i].label, final: d[d.length-1]}; }) 
-//             //     .attr("transform", function(d) { 
-//             //         return ( "translate(" + x_scale(d.final[0]) + "," + 
-//             //                  y_scale(d.final[1]) + ")" ) ; })
-//             //     .attr("x", 3)
-//             //     .attr("dy", ".35em")
-//             //     .attr("fill", function(_, i) { return color_scale(i); })
-//             //     .text(function(d) { return d.name; }) ;
-
-//         }) ;
-//     }
-
-//     chart.width = function(value) {
-//         if (!arguments.length) return width;
-//         width = value;
-//         return chart;
-//     };
-
-//     chart.height = function(value) {
-//         if (!arguments.length) return height;
-//         height = value;
-//         return chart;
-//     };
-
-//     chart.xlabel = function(value) {
-//         if(!arguments.length) return xlabel ;
-//         xlabel = value ;
-//         return chart ;
-//     } ;
-
-//     chart.ylabel = function(value) {
-//         if(!arguments.length) return ylabel ;
-//         ylabel = value ;
-//         return chart ;
-//     } ;
-
-//     return chart;
-// }
-
-  color.domain(d3.keys(data[0]).filter(function(key) { console.log(key); return key !== "Year"; }));
-
-  data.forEach(function(d) {
-    var y0 = 0;
-    d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
-    d.total = d.ages[d.ages.length - 1].y1;
-    console.log(d, d.ages, d.total);
-  });
-
-  data.sort(function(a, b) { return b.total - a.total; });
-
-  x.domain(data.map(function(d) { return d.Year; }));
-  y.domain([0, d3.max(data, function(d) { return d.total+50; })]);
-
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
-
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Population");
-
-  var state = svg.selectAll(".state")
-      .data(data)
-    .enter().append("g")
-      .attr("class", "g")
-      .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; });
-
-  state.selectAll("rect")
-      .data(function(d) { return d.ages; })
-    .enter().append("rect")
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.y1); })
-      .attr("height", function(d) { return y(d.y0) - y(d.y1); })
-      .style("fill", function(d) { return color(d.name); });
-
-  var legend = svg.selectAll(".legend")
-      .data(color.domain().slice().reverse())
-    .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-  legend.append("rect")
-      .attr("x", width - 18)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color);
-
-  legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d; });
+  
 
 // });
 
