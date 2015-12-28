@@ -33,7 +33,7 @@ function calc_supply(yr) {
 function base_bars(N) {
     var ret = [];
     for (var i=0; i<N; i++) {
-        ret.push({'Year': 2015+i, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1})
+        ret.push({'Year': i, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1})
     }
     return ret;
 }
@@ -50,11 +50,20 @@ function calc_gdp_bars(bars) {
     return ret;
 }
 
+var data_supply = [
+    { label: 'Supply', 
+        // x: years,
+        x: base,
+        y: base.map(function (x) {return calc_supply(x)})
+    }
+];
+
 var data_bars = base_bars(16);
+// data_bars.push(data_supply);
 
 var data = [ 
     { label: 'GDP', 
-        x: years,
+        x: base,
         // y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
         y: calc_gdp_bars(data_bars)
     }, 
@@ -63,12 +72,7 @@ var data = [
 
 // 4.45*[billions of cubic meters of water used for industry] + .48*[billions of cubic meters used for agriculture / livestock] = GDP (in billions of dollars)
 
-// var data_supply = [
-//     { label: 'Base', 
-//         x: years,
-//         y: base.map(function (x) {return calc_supply(5,x)})
-//     }
-// ];
+
 
 
 var xy_chart = d3_xy_chart()
@@ -79,6 +83,7 @@ var xy_chart = d3_xy_chart()
 var svg = d3.select("#graph-demand").append("svg")
     .datum(data)
     .call(xy_chart) ;
+
 
 
 // var xy_chart_supply = d3_xy_chart()
@@ -114,7 +119,11 @@ function d3_xy_chart() {
 
             var x_axis = d3.svg.axis()
                 .scale(x_scale)
-                .orient("bottom") ;
+                .orient("bottom")
+                // .tickValues(d3.range(0, 16, 1));
+                .ticks(16) ;
+
+
 
             var y_axis = d3.svg.axis()
                 .scale(y_scale)
@@ -123,7 +132,8 @@ function d3_xy_chart() {
             var x_grid = d3.svg.axis()
                 .scale(x_scale)
                 .orient("bottom")
-                .tickSize(-innerheight)
+                .ticks(16)
+                .tickSize(-innerheight, 1)
                 .tickFormat("") ;
 
             var y_grid = d3.svg.axis()
@@ -161,6 +171,8 @@ function d3_xy_chart() {
                 .attr("x", innerwidth)
                 .style("text-anchor", "end")
                 .text(xlabel) ;
+
+            // x_axis.tickValues(d3.range(0, 16, 1));
             
             svg.append("g")
                 .attr("class", "y axis")
@@ -243,6 +255,7 @@ var svg_bars = d3.select("#graph-supply").append("svg")
     .datum(data_bars)
     .call(xy_bars) ;
 
+
 function d3_xy_bars() {
     
     function chart(selection) {
@@ -282,10 +295,10 @@ function d3_xy_bars() {
                 .tickSize(-innerwidth)
                 .tickFormat("") ;
 
-            // var draw_line = d3.svg.line()
-            //     .interpolate("basis")
-            //     .x(function(d) { return x_scale(d[0]); })
-            //     .y(function(d) { return y_scale(d[1]); }) ;
+            var draw_line = d3.svg.line()
+                .interpolate("basis")
+                .x(function(d) { return x(d[0]); })
+                .y(function(d) { return y(d[1]); }) ;
 
 
             color.domain(d3.keys(datasets[0]).filter(function(key) { return key !== "Year"; }));
@@ -297,11 +310,11 @@ function d3_xy_bars() {
                 // console.log(d, d.ages, d.total);
             });
 
-            datasets.sort(function(a, b) { return b.total - a.total; });
+            // datasets.sort(function(a, b) { return b.total - a.total; });
 
             x.domain(datasets.map(function(d) { return d.Year; }));
-            y.domain([0, d3.max(datasets, function(d) { return d.total+50; })]);
-
+            // y.domain([0, d3.max(datasets, function(d) { return d.total+50; })]);
+            y.domain([0, d3.max(data_supply, function(d) { return d3.max(d.y)+50;})])
 
             //
 
@@ -376,7 +389,28 @@ function d3_xy_bars() {
                   .style("text-anchor", "end")
                   .text(function(d) { return d; });
 
-        }) ;
+
+            var data_lines = svg.selectAll(".d3_xy_chart_line")
+                .data(data_supply.map(function(d) {return d3.zip(d.x, d.y);}))
+                .enter().append("g")
+                .attr("class", "d3_xy_chart_line") ;
+
+            data_lines.append("path")
+                .attr("class", "line")
+                .attr("d", function(d) {return draw_line(d); })
+                .attr("stroke", function(_, i) {return color(i);}) ;
+
+            data_lines.append("text")
+                .datum(function(d, i) { return {name: datasets[i].label, final: d[d.length-1]}; }) 
+                .attr("transform", function(d) { 
+                    return ( "translate(" + x(d.final[0]) + "," + 
+                             y(d.final[1]) + ")" ) ; })
+                .attr("x", 3)
+                .attr("dy", ".35em")
+                .attr("fill", function(_, i) { return color(i); })
+                .text(function(d) { return d.name; }) ;
+
+                }) ;
     }
 
     chart.width = function(value) {

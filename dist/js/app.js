@@ -192,7 +192,11 @@ function Comparator(a,b) {
     return 0;
 }
 
-
+$('#ex0').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
 $('#ex1').slider({
     formatter: function(value) {
         return value+'%';
