@@ -30,14 +30,108 @@ function calc_supply(yr) {
     return 216*Math.pow(0.99,yr);
 }
 
+function calc_ag_demand(year) {
+
+    var meters = {
+        'w': 0.7, 
+        'm': 0.84, 
+        'p': 0.84, 
+        'r': 0.7,
+        'b': 0.7
+    }
+
+    var eto = {
+        'w': 0.5,
+        'm': 0.6,
+        'p': 0.6,
+        'r': 0.5,
+        'b': 0.5
+    }
+
+    var delta = {
+        'w': 100536,
+        'm': 27760,
+        'p': 5986,
+        'r': 27760,
+        'b': 26159
+    }
+
+    var percent = {
+        'f': {
+            'w': 0.93,
+            'm': 0.555,
+            'p': 1.0,
+            'r': 1.0,
+            'b': 0.4
+        }, 
+        'r' : {
+            'w': 0.06,
+            'm': 0.44,
+            'p': 0.0,
+            'r': 0.0,
+            'b': 0.6975
+        }, 
+        'd' : {
+            'w': 0.0,
+            'm': 0.005,
+            'p': 0.0,
+            'r': 0.0,
+            'b': 0.0025
+        }
+    }
+
+    var AG_ANNUAL_GROWTH = 0.1;
+    var rainfall_t = 0.31;
+    var init_waterdemand = 438;
+    // var crops = ['w', 'm', 'p', 'r', 'b'];
+
+    var tmp = init_waterdemand * Math.pow((1 + AG_ANNUAL_GROWTH), year);
+    for (var c of ['w', 'm', 'p', 'r', 'b']) {
+        tmp += delta[c] * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall_t + percent['d'][c] * eto[c]);
+        // console.log(tmp);
+    }
+    console.log(tmp);
+    return tmp / Math.pow(10, 3);
+
+    // var ret = [];
+    // for (var year=0; year < N; year++) {
+    //     // console.log(year);
+    //     var tmp = init_waterdemand * Math.pow((1 + AG_ANNUAL_GROWTH), year);
+    //     // console.log(Math.exp(1.01, year));
+    //     // console.log(tmp);
+    //     for (var c of ['w', 'm', 'p', 'r', 'b']) {
+    //         tmp += delta[c] * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall_t + percent['d'][c] * eto[c]);
+    //     }
+    //     console.log(tmp);
+    //     ret.push(tmp);
+    // }
+    // console.log(ret)
+
+    // console.log(ret);
+    // return init_waterdemand * Math.exp((1 + AG_ANNUAL_GROWTH), year) + 
+    //     delta_h * (percent_f * METERS_W + percent_r * rainfall_t + percent_d * ETO_W) +
+    //     delta_m * (percent_f * METERS_M + percent_r * rainfall_t + percent_d * ETO_M) +
+    //     delta_p * (percent_f * METERS_P + percent_r * rainfall_t + percent_d * ETO_P) +
+    //     delta_b * (percent_b * METERS_B + percent_r * rainfall_t + percent_d * ETO_B);
+
+}
+
+// for (var i=0; i<15; i++) {
+//     console.log(calc_ag_demand(i));
+// }
+// console.log(calc_ag_demand(0));
+// calc_ag_demand(5);
+
 function base_bars(N) {
-    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
+    // var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
+    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0), 'Industry': 1}];
     for (var i=1; i<N; i++) {
         ret.push({
             'Year': i, 
             'Drinking': ret[i-1].Drinking*1.035, 
             'Livestock': ret[i-1].Livestock*1.0075, 
-            'Agriculture': ret[i-1].Agriculture*1.01, 
+            // 'Agriculture': ret[i-1].Agriculture*1.01,
+            'Agriculture': calc_ag_demand(i), 
             'Industry': ret[i-1].Industry*1.015
         });
     }
@@ -453,80 +547,3 @@ function d3_xy_bars() {
 
     return chart;
 }
-
-  
-
-// });
-
-
-
- // var w = 960,
- //    h = 500
- // var w = WIDTH,
- //    h = HEIGHT
-
- //            // create canvas
- //            var svg = d3.select("#viz").append("svg:svg")
- //            .attr("class", "chart")
- //            .attr("width", w)
- //            .attr("height", h)
- //            .append("svg:g")
- //            .attr("transform", "translate(10,470)");
-
- //            x = d3.scale.ordinal().rangeRoundBands([0, w])
- //            y = d3.scale.linear().range([0, h])
- //            z = d3.scale.ordinal().range(["darkblue", "blue", "lightblue"])
-
- //            console.log(d3.scale)
-
- //            console.log("RAW MATRIX---------------------------");
- //        // 4 columns: ID,c1,c2,c3
- //            var matrix = [
- //                [ 1,  5871, 8916, 2868],
- //                [ 2, 10048, 2060, 6171],
- //                [ 3, 16145, 8090, 8045],
- //                [ 4,   990,  940, 6907],
- //                [ 5,   450,  430, 5000]
- //            ];
- //            console.log(matrix)
-
- //            console.log("REMAP---------------------------");
- //            var remapped =["c1","c2","c3"].map(function(dat,i){
- //                return matrix.map(function(d,ii){
- //                    return {x: ii, y: d[i+1] };
- //                })
- //            });
- //            console.log(remapped)
-
- //            console.log("LAYOUT---------------------------");
- //            var stacked = d3.layout.stack()(remapped)
- //            console.log(stacked)
-
- //            x.domain(stacked[0].map(function(d) { return d.x; }));
- //            y.domain([0, d3.max(stacked[stacked.length - 1], function(d) { return d.y0 + d.y; })]);
-
- //            // show the domains of the scales              
- //            console.log("x.domain(): " + x.domain())
- //            console.log("y.domain(): " + y.domain())
- //            console.log("------------------------------------------------------------------");
-
- //            // Add a group for each column.
- //            var valgroup = svg.selectAll("g.valgroup")
- //            .data(stacked)
- //            .enter().append("svg:g")
- //            .attr("class", "valgroup")
- //            .style("fill", function(d, i) { return z(i); })
- //            .style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
-
- //            // Add a rect for each date.
- //            var rect = valgroup.selectAll("rect")
- //                .data(function(d){return d;})
- //                .enter().append("svg:rect")
- //                .attr("x", function(d) { console.log(x(d.x)); return x(d.x); })
- //                .attr("y", function(d) { console.log(-y(d.y0) - y(d.y)); return -y(d.y0) - y(d.y); })
- //                .attr("height", function(d) { console.log(y(d.y), x.rangeBand()); return y(d.y); })
- //                .attr("width", x.rangeBand());
-
- //            // console.log(x.rangeBand());
-
-
