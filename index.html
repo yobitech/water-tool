@@ -66,60 +66,100 @@
 
         <div class="col-md-6">
 
-          <div style='padding:20px'></div>
+          <!-- <div style='padding:20px'></div> -->
 
           <form class="form-horizontal" role="form">
             <div class="form-group">
-              <label class="control-label col-sm-4" for="email">Year:</label>
+              <label class="control-label col-sm-3" for="box-year">Year:</label>
               <div class="col-sm-2">
-                <input type="email" class="form-control" id="email" placeholder="2015">
+                <input type="text" class="form-control" id="box-year" value="2015">
               </div>
               <button class='btn btn-primary' id='update-year'>Update</button>
               <div style='padding:10px'></div>
               <div class='row'>
-                <div class='col-sm-4 control-label'><p>Rainfall:</p></div>
-                <div class='col-sm-6'><input id="ex0" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="100"/></div>
+                <div class='col-sm-3 control-label' for='box-rainfall'><p>Rainfall:</p></div>
+                <div class="col-sm-2"> 
+                  <input type="text" class="form-control" id="box-rainfall" placeholder="60%" disabled>
+                </div>
+                <div class='col-sm-5'><input id="slider-rainfall" data-slider-id='slider-rainfall' type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="100"/></div>
+                <div class='col-sm-1'><button class='btn btn-primary' id='update-rainfall'>Update</button></div>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="control-label col-sm-4" for="pwd">Water consumption:</label>
+              <label class="control-label col-sm-3" for="box-drinking">Drinking:</label>
               <div class="col-sm-2"> 
-                <input type="password" class="form-control" id="pwd" placeholder="30%" disabled>
+                <input type="text" class="form-control" id="box-drinking" placeholder="" disabled>
               </div>
-              <button class='btn btn-primary' id='update-year' disabled>Update</button>
+              <button class='btn btn-primary' id='update-drinking' disabled>Update</button>
             </div>
             <div class="form-group">
-              <label class="control-label col-sm-4" for="pwd">Agricultural split:</label>
+              <label class="control-label col-sm-3" for="box-livestock">Livestock:</label>
               <div class="col-sm-2"> 
-                <input type="password" class="form-control" id="pwd" placeholder="60%" disabled>
+                <input type="text" class="form-control" id="box-livestock" placeholder="" disabled>
               </div>
-              <button class='btn btn-primary' id='update-year'>Update</button>
+              <button class='btn btn-primary' id='update-livestock' disabled>Update</button>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="box-agriculture">Agriculture:</label>
+              <div class="col-sm-2"> 
+                <input type="text" class="form-control" id="box-agriculture" placeholder="" disabled>
+              </div>
+              <button class='btn btn-primary' id='update-agriculture' disabled>Update</button>
 
               <div style='padding:10px'></div>
               <div class='row'>
-                <div class='col-sm-4 control-label'><p>Cotton:</p></div>
-                <div class='col-sm-6'><input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="55"/></div>
+                <div class='col-sm-3 control-label'><p>Wheat:</p></div>
+                <div class="col-sm-2"> 
+                  <input type="text" class="form-control" id="pwd" placeholder="60%" disabled>
+                </div>
+                <div class='col-sm-6'><input id="slider-wheat" data-slider-id='slider-wheat' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="55"/></div>
               </div>
               <div class='row'>
-                <div class='col-sm-4 control-label'><p>Wheat:</p></div>
-                <div class='col-sm-6'><input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="10"/></div>
+                <div class='col-sm-3 control-label'><p>Mustard:</p></div>
+                <div class="col-sm-2"> 
+                  <input type="text" class="form-control" id="pwd" placeholder="60%" disabled>
+                </div>
+                <div class='col-sm-6'><input id="slider-mustard" data-slider-id='slider-mustard' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="10"/></div>
               </div>
               <div class='row'>
-                <div class='col-sm-4 control-label'><p>Mustard:</p></div>
-                <div class='col-sm-6'><input id="ex3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="35"/></div>
+                <div class='col-sm-3 control-label'><p>Paddy:</p></div>
+                <div class="col-sm-2"> 
+                  <input type="text" class="form-control" id="pwd" placeholder="60%" disabled>
+                </div>
+                <div class='col-sm-6'><input id="slider-paddy" data-slider-id='slider-paddy' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="35"/></div>
               </div>
-
-
+              <div class='row'>
+                <div class='col-sm-3 control-label'><p>Raya:</p></div>
+                <div class="col-sm-2"> 
+                  <input type="text" class="form-control" id="pwd" placeholder="60%" disabled>
+                </div>
+                <div class='col-sm-6'><input id="slider-raya" data-slider-id='slider-raya' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="35"/></div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-3 control-label'><p>Bajra:</p></div>
+                <div class="col-sm-2"> 
+                  <input type="text" class="form-control" id="pwd" placeholder="60%" disabled>
+                </div>
+                <div class='col-sm-6'><input id="slider-bajra" data-slider-id='slider-bajra' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="35"/></div>
+              </div>
             </div>
             <div class="form-group">
+              <label class="control-label col-sm-3" for="box-industry">Industry:</label>
+              <div class="col-sm-2"> 
+                <input type="text" class="form-control" id="box-industry" placeholder="" disabled>
+              </div>
+              <button class='btn btn-primary' id='update-industry' disabled>Update</button>
+            </div>
+
+            <!-- <div class="form-group">
               <label class="control-label col-sm-4" for="pwd">Irrigation split:</label>
               <div class="col-sm-2"> 
                 <input type="password" class="form-control" id="pwd" placeholder="10%" disabled>
               </div>
               <button class='btn btn-primary' id='update-year'>Update</button>
 
-              <!-- <input id="ex16b" type="text"/> -->
+              <input id="ex16b" type="text"/>
               <div style='padding:10px'></div>
               <div class='row'>
                 <div class='col-sm-4 control-label'><p>Drip irrigation:</p></div>
@@ -134,7 +174,7 @@
                 <div class='col-sm-6'><input id="ex6" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="65"/></div>
               </div>
 
-            </div>
+            </div> -->
           </form>
 
           <!-- <form class="form-inline" role="form">

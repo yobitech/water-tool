@@ -30,11 +30,25 @@ function calc_supply(yr) {
     return 216*Math.pow(0.99,yr);
 }
 
-function calc_ag_demand(year) {
+function calc_supply_rf(r) {
+    return 215 * r / .446 / Math.pow(10,3);
+}
+
+function calc_supply_wrainfall(rfs) {
+    var ret = []
+    for (var r of rfs) {
+        ret.push(calc_supply_rf(r));
+    }
+    return ret;
+}
+
+var init = {'w': 100536, 'm': 27760, 'p': 5986, 'r': 27760, 'b': 26159, 
+    'waterdemand': 132, 'rainfall': 0.31};
+
+function calc_ag_demand(year, delta, rainfall) {
 
     var meters = {'w': 0.7, 'm': 0.84, 'p': 0.84, 'r': 0.7, 'b': 0.7};
     var eto = {'w': 0.5, 'm': 0.6, 'p': 0.6, 'r': 0.5, 'b': 0.5};
-    var delta = {'w': 100536, 'm': 27760, 'p': 5986, 'r': 27760, 'b': 26159};
     var percent = {
         'f': {'w': 0.93,'m': 0.555,'p': 1.0,'r': 1.0,'b': 0.4}, 
         'r': {'w': 0.06,'m': 0.44,'p': 0.0,'r': 0.0,'b': 0.6975}, 
@@ -42,30 +56,32 @@ function calc_ag_demand(year) {
     }
 
     var AG_ANNUAL_GROWTH = 0.1;
-    var rainfall_t = 0.31;
-    var init_waterdemand = 438;
+    // var rainfall_t = 0.31;
+    // var init_waterdemand = 438;
+    // var init.waterdemand = 132;
     // var crops = ['w', 'm', 'p', 'r', 'b'];
 
-    var tmp = init_waterdemand * Math.pow((1 + AG_ANNUAL_GROWTH), year);
+    var tmp = init.waterdemand * Math.pow((1 + AG_ANNUAL_GROWTH), year);
+    // console.log('before', tmp);
     for (var c of ['w', 'm', 'p', 'r', 'b']) {
-        tmp += delta[c] * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall_t + percent['d'][c] * eto[c]);
+        tmp += (delta[c]-init[c])/Math.pow(10,3) * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall + percent['d'][c] * eto[c]);
         // console.log(tmp);
     }
     // console.log(tmp);
-    return tmp / Math.pow(10, 3);
+    return tmp;
 
 }
 
 function base_bars(N) {
     // var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
-    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0), 'Industry': 1}];
+    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0, init, init.rainfall), 'Industry': 1}];
     for (var i=1; i<N; i++) {
         ret.push({
             'Year': i, 
             'Drinking': ret[i-1].Drinking*1.035, 
             'Livestock': ret[i-1].Livestock*1.0075, 
             // 'Agriculture': ret[i-1].Agriculture*1.01,
-            'Agriculture': calc_ag_demand(i), 
+            'Agriculture': calc_ag_demand(i, init, init.rainfall), 
             'Industry': ret[i-1].Industry*1.015
         });
     }
@@ -85,12 +101,15 @@ function calc_gdp_bars(bars) {
     return ret;
 }
 
+
+var data_rainfall = repeated_array(N, 446);
 var data_supply = [
     { label: 'Supply', 
         // x: years,
         x: base,
         // y: base
-        y: base.map(function (x) {return calc_supply(x)})
+        // y: base.map(function (x) {return calc_supply(x)})
+        y: calc_supply_wrainfall(data_rainfall)
         // y: ones
     }
 ];
@@ -106,6 +125,7 @@ var data = [
         // y: ones
     }, 
 ];
+
 
 var xy_chart = d3_xy_chart()
     .width(WIDTH)
@@ -322,7 +342,7 @@ function d3_xy_bars() {
             });
 
             x.domain(bars_data.map(function(d) { return d.Year; }));
-            y.domain([0, d3.max(data_supply, function(d) { return d3.max(d.y)+50;})])
+            y.domain([0, d3.max(lines_data, function(d) { return d3.max(d.y)+50;})])
 
             //
 
