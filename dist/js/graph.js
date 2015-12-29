@@ -31,10 +31,17 @@ function calc_supply(yr) {
 }
 
 function base_bars(N) {
-    var ret = [];
-    for (var i=0; i<N; i++) {
-        ret.push({'Year': i, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1})
+    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
+    for (var i=1; i<N; i++) {
+        ret.push({
+            'Year': i, 
+            'Drinking': ret[i-1].Drinking*1.035, 
+            'Livestock': ret[i-1].Livestock*1.0075, 
+            'Agriculture': ret[i-1].Agriculture*1.01, 
+            'Industry': ret[i-1].Industry*1.015
+        });
     }
+    // console.log(ret);
     return ret;
 }
 
@@ -54,7 +61,9 @@ var data_supply = [
     { label: 'Supply', 
         // x: years,
         x: base,
+        // y: base
         y: base.map(function (x) {return calc_supply(x)})
+        // y: ones
     }
 ];
 
@@ -66,6 +75,7 @@ var data = [
         x: base,
         // y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
         y: calc_gdp_bars(data_bars)
+        // y: ones
     }, 
 ];
 
@@ -252,7 +262,7 @@ var xy_bars = d3_xy_bars()
     .xlabel("Time (years)")
     .ylabel("Water supply (mcm3)") ;
 var svg_bars = d3.select("#graph-supply").append("svg")
-    .datum(data_bars)
+    .datum({'bars': data_bars, 'lines': data_supply})
     .call(xy_bars) ;
 
 
@@ -260,6 +270,9 @@ function d3_xy_bars() {
     
     function chart(selection) {
         selection.each(function(datasets) {
+
+            var bars_data = datasets.bars,
+                lines_data = datasets.lines;
 
             var margin = {top: 20, right: 80, bottom: 30, left: 50},
                 innerwidth = width - margin.left - margin.right,
@@ -301,9 +314,9 @@ function d3_xy_bars() {
                 .y(function(d) { return y(d[1]); }) ;
 
 
-            color.domain(d3.keys(datasets[0]).filter(function(key) { return key !== "Year"; }));
+            color.domain(d3.keys(bars_data[0]).filter(function(key) { return key !== "Year"; }));
 
-            datasets.forEach(function(d) {
+            bars_data.forEach(function(d) {
                 var y0 = 0;
                 d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
                 d.total = d.ages[d.ages.length - 1].y1;
@@ -312,7 +325,7 @@ function d3_xy_bars() {
 
             // datasets.sort(function(a, b) { return b.total - a.total; });
 
-            x.domain(datasets.map(function(d) { return d.Year; }));
+            x.domain(bars_data.map(function(d) { return d.Year; }));
             // y.domain([0, d3.max(datasets, function(d) { return d.total+50; })]);
             y.domain([0, d3.max(data_supply, function(d) { return d3.max(d.y)+50;})])
 
@@ -337,7 +350,7 @@ function d3_xy_bars() {
               
 
               var state = svg.selectAll(".state")
-                  .data(datasets)
+                  .data(bars_data)
                 .enter().append("g")
                   .attr("class", "g")
                   .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; });
@@ -389,9 +402,10 @@ function d3_xy_bars() {
                   .style("text-anchor", "end")
                   .text(function(d) { return d; });
 
+            // get lines data
 
             var data_lines = svg.selectAll(".d3_xy_chart_line")
-                .data(data_supply.map(function(d) {return d3.zip(d.x, d.y);}))
+                .data(lines_data.map(function(d) {return d3.zip(d.x, d.y);}))
                 .enter().append("g")
                 .attr("class", "d3_xy_chart_line") ;
 
@@ -401,7 +415,7 @@ function d3_xy_bars() {
                 .attr("stroke", function(_, i) {return color(i);}) ;
 
             data_lines.append("text")
-                .datum(function(d, i) { return {name: datasets[i].label, final: d[d.length-1]}; }) 
+                .datum(function(d, i) { return {name: lines_data[i].label, final: d[d.length-1]}; }) 
                 .attr("transform", function(d) { 
                     return ( "translate(" + x(d.final[0]) + "," + 
                              y(d.final[1]) + ")" ) ; })
@@ -410,7 +424,7 @@ function d3_xy_bars() {
                 .attr("fill", function(_, i) { return color(i); })
                 .text(function(d) { return d.name; }) ;
 
-                }) ;
+        }) ;
     }
 
     chart.width = function(value) {
