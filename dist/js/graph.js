@@ -32,52 +32,13 @@ function calc_supply(yr) {
 
 function calc_ag_demand(year) {
 
-    var meters = {
-        'w': 0.7, 
-        'm': 0.84, 
-        'p': 0.84, 
-        'r': 0.7,
-        'b': 0.7
-    }
-
-    var eto = {
-        'w': 0.5,
-        'm': 0.6,
-        'p': 0.6,
-        'r': 0.5,
-        'b': 0.5
-    }
-
-    var delta = {
-        'w': 100536,
-        'm': 27760,
-        'p': 5986,
-        'r': 27760,
-        'b': 26159
-    }
-
+    var meters = {'w': 0.7, 'm': 0.84, 'p': 0.84, 'r': 0.7, 'b': 0.7};
+    var eto = {'w': 0.5, 'm': 0.6, 'p': 0.6, 'r': 0.5, 'b': 0.5};
+    var delta = {'w': 100536, 'm': 27760, 'p': 5986, 'r': 27760, 'b': 26159};
     var percent = {
-        'f': {
-            'w': 0.93,
-            'm': 0.555,
-            'p': 1.0,
-            'r': 1.0,
-            'b': 0.4
-        }, 
-        'r' : {
-            'w': 0.06,
-            'm': 0.44,
-            'p': 0.0,
-            'r': 0.0,
-            'b': 0.6975
-        }, 
-        'd' : {
-            'w': 0.0,
-            'm': 0.005,
-            'p': 0.0,
-            'r': 0.0,
-            'b': 0.0025
-        }
+        'f': {'w': 0.93,'m': 0.555,'p': 1.0,'r': 1.0,'b': 0.4}, 
+        'r': {'w': 0.06,'m': 0.44,'p': 0.0,'r': 0.0,'b': 0.6975}, 
+        'd': {'w': 0.0,'m': 0.005,'p': 0.0,'r': 0.0,'b': 0.0025}
     }
 
     var AG_ANNUAL_GROWTH = 0.1;
@@ -90,37 +51,10 @@ function calc_ag_demand(year) {
         tmp += delta[c] * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall_t + percent['d'][c] * eto[c]);
         // console.log(tmp);
     }
-    console.log(tmp);
+    // console.log(tmp);
     return tmp / Math.pow(10, 3);
 
-    // var ret = [];
-    // for (var year=0; year < N; year++) {
-    //     // console.log(year);
-    //     var tmp = init_waterdemand * Math.pow((1 + AG_ANNUAL_GROWTH), year);
-    //     // console.log(Math.exp(1.01, year));
-    //     // console.log(tmp);
-    //     for (var c of ['w', 'm', 'p', 'r', 'b']) {
-    //         tmp += delta[c] * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall_t + percent['d'][c] * eto[c]);
-    //     }
-    //     console.log(tmp);
-    //     ret.push(tmp);
-    // }
-    // console.log(ret)
-
-    // console.log(ret);
-    // return init_waterdemand * Math.exp((1 + AG_ANNUAL_GROWTH), year) + 
-    //     delta_h * (percent_f * METERS_W + percent_r * rainfall_t + percent_d * ETO_W) +
-    //     delta_m * (percent_f * METERS_M + percent_r * rainfall_t + percent_d * ETO_M) +
-    //     delta_p * (percent_f * METERS_P + percent_r * rainfall_t + percent_d * ETO_P) +
-    //     delta_b * (percent_b * METERS_B + percent_r * rainfall_t + percent_d * ETO_B);
-
 }
-
-// for (var i=0; i<15; i++) {
-//     console.log(calc_ag_demand(i));
-// }
-// console.log(calc_ag_demand(0));
-// calc_ag_demand(5);
 
 function base_bars(N) {
     // var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
@@ -173,12 +107,6 @@ var data = [
     }, 
 ];
 
-
-// 4.45*[billions of cubic meters of water used for industry] + .48*[billions of cubic meters used for agriculture / livestock] = GDP (in billions of dollars)
-
-
-
-
 var xy_chart = d3_xy_chart()
     .width(WIDTH)
     .height(HEIGHT)
@@ -187,17 +115,6 @@ var xy_chart = d3_xy_chart()
 var svg = d3.select("#graph-demand").append("svg")
     .datum(data)
     .call(xy_chart) ;
-
-
-
-// var xy_chart_supply = d3_xy_chart()
-//     .width(WIDTH)
-//     .height(HEIGHT)
-//     .xlabel("Time (years)")
-//     .ylabel("Water supply (mcm3)") ;
-// var svg_supply = d3.select("#graph-supply").append("svg")
-//     .datum(data_supply)
-//     .call(xy_chart_supply) ;
 
 function d3_xy_chart() {
     
@@ -338,18 +255,6 @@ function d3_xy_chart() {
     return chart;
 }
 
-
-
-// d3.csv("data.csv", function(error, data) {
-  // if (error) throw error;
-// var data = [
-//     ['State,Under 5 Years','5 to 13 Years','14 to 17 Years','18 to 24 Years','25 to 44 Years','45 to 64 Years','65 Years and Over'],
-//     ['AL', 310504, 310504,552339,259034,450818,1231572,1215966,641667]
-// ]
-// var data = [{'State': 'AL', 'Under 5 Years': 310504, '5 to 13 Years': 310504}]
-// 12 for domestic drinking water, 3.5 for livestock, 132 for ag, and like 1 for industry
-
-
 var xy_bars = d3_xy_bars()
     .width(WIDTH)
     .height(HEIGHT)
@@ -414,13 +319,9 @@ function d3_xy_bars() {
                 var y0 = 0;
                 d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
                 d.total = d.ages[d.ages.length - 1].y1;
-                // console.log(d, d.ages, d.total);
             });
 
-            // datasets.sort(function(a, b) { return b.total - a.total; });
-
             x.domain(bars_data.map(function(d) { return d.Year; }));
-            // y.domain([0, d3.max(datasets, function(d) { return d.total+50; })]);
             y.domain([0, d3.max(data_supply, function(d) { return d3.max(d.y)+50;})])
 
             //
