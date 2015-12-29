@@ -42,10 +42,26 @@ function calc_supply_wrainfall(rfs) {
     return ret;
 }
 
-var init = {'w': 100536, 'm': 27760, 'p': 5986, 'r': 27760, 'b': 26159, 
+var init = {'w': 100.536, 'm': 27.760, 'p': 5.986, 'r': 27.760, 'b': 26.159, 
     'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446};
 
-function calc_ag_demand(year, delta, rainfall) {
+var data_crops = build_crops(N);
+
+function build_crops (N) {
+    var ret = []
+    for (var i=0; i<N; i++) {
+        var tmp = {'Year': i};
+        for (var c of ['w', 'm', 'p', 'r', 'b']) {
+            tmp[c] = init[c];
+        }
+        ret.push(tmp)
+    }
+    // console.log(ret);
+    return ret;
+}
+
+
+function calc_ag_demand(year, data_crops) {
 
     var meters = {'w': 0.7, 'm': 0.84, 'p': 0.84, 'r': 0.7, 'b': 0.7};
     var eto = {'w': 0.5, 'm': 0.6, 'p': 0.6, 'r': 0.5, 'b': 0.5};
@@ -62,31 +78,38 @@ function calc_ag_demand(year, delta, rainfall) {
     // var crops = ['w', 'm', 'p', 'r', 'b'];
 
     var tmp = init.waterdemand * Math.pow((1 + AG_ANNUAL_GROWTH), year);
+    console.log('tmpbefore', tmp);
+    if (year == 0) {
+        return tmp;
+    }
+    else {
+        for (var c of ['w', 'm', 'p', 'r', 'b']) {
+            tmp += (data_crops[year][c]-data_crops[year-1][c]) * (percent['f'][c] * meters[c] + percent['r'][c] * init.rainfall_t + percent['d'][c] * eto[c]);
+            console.log(c, data_crops[year][c], data_crops[year-1][c]);
+        }
+        console.log('tmpafter', tmp);
+        return tmp;
+    }
     // console.log(init.waterdemand, 1+AG_Atmp);
     // console.log('before', tmp);
-    for (var c of ['w', 'm', 'p', 'r', 'b']) {
-        tmp += (delta[c]-init[c])/Math.pow(10,3) * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall + percent['d'][c] * eto[c]);
-        // console.log(tmp);
-    }
-    // console.log(tmp);
-    return tmp;
+    
 
 }
 
 function base_bars(N) {
     // var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
-    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0, init, init.rainfall_t), 'Industry': 1}];
+    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0, data_crops), 'Industry': 1}];
     for (var i=1; i<N; i++) {
         ret.push({
             'Year': i, 
             'Drinking': ret[i-1].Drinking*1.035, 
             'Livestock': ret[i-1].Livestock*1.0075, 
             // 'Agriculture': ret[i-1].Agriculture*1.01,
-            'Agriculture': calc_ag_demand(i, init, init.rainfall_t), 
+            'Agriculture': calc_ag_demand(i, data_crops), 
             'Industry': ret[i-1].Industry*1.015
         });
     }
-    // console.log(ret);
+    console.log(ret);
     return ret;
 }
 
@@ -128,6 +151,8 @@ var data = [
         // y: ones
     }, 
 ];
+
+
 
 // console.log(data, data_bars, data_supply);
 
@@ -295,18 +320,10 @@ function d3_xy_bars() {
     
     function chart(selection) {
         selection.each(function(datasets) {
-
-<<<<<<< HEAD
             console.log(datasets);
 
             var bars_data = datasets.bars,
                 lines_data = datasets.lines;
-=======
-            var data_bars = datasets.bars;
-            var data_lined = datasets.lines;
-
-            // console.log(data_bars, data_lines);
->>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
 
             var margin = {top: 20, right: 80, bottom: 30, left: 50},
                 innerwidth = width - margin.left - margin.right,
@@ -347,31 +364,16 @@ function d3_xy_bars() {
                 .x(function(d) { return x(d[0]); })
                 .y(function(d) { return y(d[1]); }) ;
 
-
-<<<<<<< HEAD
             color.domain(d3.keys(bars_data[0]).filter(function(key) { return ['Year', 'ages', 'total'].indexOf(key) < 0; }));
 
             bars_data.forEach(function(d) {
-=======
-            color.domain(d3.keys(data_bars[0]).filter(function(key) { return key !== "Year"; }));
-
-            data_bars.forEach(function(d) {
->>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 var y0 = 0;
                 d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
                 d.total = d.ages[d.ages.length - 1].y1;
             });
 
-<<<<<<< HEAD
             x.domain(bars_data.map(function(d) { return d.Year; }));
             y.domain([0, d3.max(lines_data, function(d) { return d3.max(d.y)+50;})])
-=======
-            // datasets.sort(function(a, b) { return b.total - a.total; });
-
-            x.domain(data_bars.map(function(d) { return d.Year; }));
-            // y.domain([0, d3.max(datasets, function(d) { return d.total+50; })]);
-            y.domain([0, d3.max(data_supply, function(d) { return d3.max(d.y)+50;})])
->>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
 
             //
 
@@ -394,11 +396,7 @@ function d3_xy_bars() {
               
 
               var state = svg.selectAll(".state")
-<<<<<<< HEAD
                   .data(bars_data)
-=======
-                  .data(data_bars)
->>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 .enter().append("g")
                   .attr("class", "g")
                   .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; });
@@ -453,11 +451,7 @@ function d3_xy_bars() {
             // get lines data
 
             var data_lines = svg.selectAll(".d3_xy_chart_line")
-<<<<<<< HEAD
                 .data(lines_data.map(function(d) {return d3.zip(d.x, d.y);}))
-=======
-                .data(data_lined.map(function(d) {return d3.zip(d.x, d.y);}))
->>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 .enter().append("g")
                 .attr("class", "d3_xy_chart_line") ;
             
@@ -467,11 +461,7 @@ function d3_xy_bars() {
                 .attr("stroke", function(_, i) {return color(i);}) ;
             
             data_lines.append("text")
-<<<<<<< HEAD
                 .datum(function(d, i) { return {name: lines_data[i].label, final: d[d.length-1]}; }) 
-=======
-                .datum(function(d, i) { return {name: data_lined[i].label, final: d[d.length-1]}; }) 
->>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 .attr("transform", function(d) { 
                     return ( "translate(" + x(d.final[0]) + "," + 
                              y(d.final[1]) + ")" ) ; })
@@ -480,33 +470,7 @@ function d3_xy_bars() {
                 .attr("fill", function(_, i) { return color(i); })
                 .text(function(d) { return d.name; }) ;
 
-<<<<<<< HEAD
         }) ;
-=======
-
-            // line stuff
-            // var svg_lines = svg.selectAll(".d3_xy_chart_line")
-            //     .data(data_lines.map(function(d) {return d3.zip(d.x, d.y);}))
-            //     .enter().append("g")
-            //     .attr("class", "d3_xy_chart_line") ;
-
-            // svg_lines.append("path")
-            //     .attr("class", "line")
-            //     .attr("d", function(d) {return draw_line(d); })
-            //     .attr("stroke", function(_, i) {return color(i);}) ;
-
-            // svg_lines.append("text")
-            //     .datum(function(d, i) { return {name: data_lines[i].label, final: d[d.length-1]}; }) 
-            //     .attr("transform", function(d) { 
-            //         return ( "translate(" + x(d.final[0]) + "," + 
-            //                  y(d.final[1]) + ")" ) ; })
-            //     .attr("x", 3)
-            //     .attr("dy", ".35em")
-            //     .attr("fill", function(_, i) { return color(i); })
-            //     .text(function(d) { return d.name; }) ;
-
-                }) ;
->>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
     }
 
     chart.width = function(value) {
