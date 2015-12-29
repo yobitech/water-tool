@@ -55,13 +55,14 @@ function calc_ag_demand(year, delta, rainfall) {
         'd': {'w': 0.0,'m': 0.005,'p': 0.0,'r': 0.0,'b': 0.0025}
     }
 
-    var AG_ANNUAL_GROWTH = 0.1;
+    var AG_ANNUAL_GROWTH = 0.01;
     // var rainfall_t = 0.31;
     // var init_waterdemand = 438;
     // var init.waterdemand = 132;
     // var crops = ['w', 'm', 'p', 'r', 'b'];
 
     var tmp = init.waterdemand * Math.pow((1 + AG_ANNUAL_GROWTH), year);
+    // console.log(init.waterdemand, 1+AG_Atmp);
     // console.log('before', tmp);
     for (var c of ['w', 'm', 'p', 'r', 'b']) {
         tmp += (delta[c]-init[c])/Math.pow(10,3) * (percent['f'][c] * meters[c] + percent['r'][c] * rainfall + percent['d'][c] * eto[c]);
