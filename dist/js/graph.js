@@ -43,7 +43,7 @@ function calc_supply_wrainfall(rfs) {
 }
 
 var init = {'w': 100536, 'm': 27760, 'p': 5986, 'r': 27760, 'b': 26159, 
-    'waterdemand': 132, 'rainfall': 0.31};
+    'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446};
 
 function calc_ag_demand(year, delta, rainfall) {
 
@@ -75,14 +75,14 @@ function calc_ag_demand(year, delta, rainfall) {
 
 function base_bars(N) {
     // var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
-    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0, init, init.rainfall), 'Industry': 1}];
+    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0, init, init.rainfall_t), 'Industry': 1}];
     for (var i=1; i<N; i++) {
         ret.push({
             'Year': i, 
             'Drinking': ret[i-1].Drinking*1.035, 
             'Livestock': ret[i-1].Livestock*1.0075, 
             // 'Agriculture': ret[i-1].Agriculture*1.01,
-            'Agriculture': calc_ag_demand(i, init, init.rainfall), 
+            'Agriculture': calc_ag_demand(i, init, init.rainfall_t), 
             'Industry': ret[i-1].Industry*1.015
         });
     }
@@ -291,6 +291,8 @@ function d3_xy_bars() {
     function chart(selection) {
         selection.each(function(datasets) {
 
+            console.log(datasets);
+
             var bars_data = datasets.bars,
                 lines_data = datasets.lines;
 
@@ -334,7 +336,7 @@ function d3_xy_bars() {
                 .y(function(d) { return y(d[1]); }) ;
 
 
-            color.domain(d3.keys(bars_data[0]).filter(function(key) { return key !== "Year"; }));
+            color.domain(d3.keys(bars_data[0]).filter(function(key) { return ['Year', 'ages', 'total'].indexOf(key) < 0; }));
 
             bars_data.forEach(function(d) {
                 var y0 = 0;

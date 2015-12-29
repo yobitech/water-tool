@@ -237,7 +237,7 @@ function populate_info(year) {
     // get data from data_bars for year
     // console.log(2015-Number(year));
     var years_data = data_bars.filter(function (obj) {
-        return obj.Year == (Number(year)-2015);
+        return obj.Year == year;
     });
     console.log(years_data);
     var year_data = years_data[0];
@@ -254,22 +254,29 @@ function populate_info(year) {
 
 }
 // $(document).ready( function() {
-    var year_curr = $('#box-year').val();
-    populate_info(year_curr);
-    $('#box-rainfall').val(init.rainfall);
+var year_curr = $('#box-year').val()-2015;
+populate_info(year_curr);
+$('#box-rainfall').val(data_rainfall[0]);
 // });
 
 
 $('#update-year').click(function () {
-    year_curr = $('#box-year').val();
-    if (year_curr < 2015) {
+    var box_year_val = $('#box-year').val();
+    // console.log(box_year_val)
+    if (box_year_val < 2015) {
         alert('Year must be greater than 2015');
     }
-    else if (year_curr > 2030) {
+    else if (box_year_val > 2030) {
         alert('Year must be less than 2030');
     }
     else {
+        year_curr = box_year_val - 2015;
         populate_info(year_curr);
+
+        // update rainfall
+        var new_rainfall = data_rainfall[year_curr];
+        $('#box-rainfall').val(new_rainfall);
+        slider_rainfall.slider('setValue', new_rainfall / init.rainfall * 100)
     }
 });
 
@@ -277,16 +284,39 @@ $('#update-year').click(function () {
 
 $('#update-rainfall').click(function() {
     
+    // update data
     var update_rainfall = slider_rainfall.slider('getValue') / 100;
-    var curr_rainfall = $('#box-rainfall').val();
-    $('#box-rainfall').val(curr_rainfall * update_rainfall);
-    // update stored data
-    data_rainfall['y'+0] = curr_rainfall * update_rainfall;
+    data_rainfall[year_curr] = update_rainfall * init.rainfall;
+    $('#box-rainfall').val(parseFloat(data_rainfall[year_curr]).toFixed(2));
+
     // update graph
+    data_supply[0].y[year_curr] = calc_supply_rf(data_rainfall[year_curr]);
+    $("#graph-supply").html("");
 
+    var xy_bars = d3_xy_bars()
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Water supply (mcm3)") ;
+    var svg_bars = d3.select("#graph-supply").append("svg")
+        .datum({'bars': data_bars, 'lines': data_supply})
+        .call(xy_bars) ;
 
+    // var xy_chart = d3_xy_chart()
+    //     // .width(960)
+    //     // .height(500)
+    //     .width(WIDTH)
+    //     .height(HEIGHT)
+    //     .xlabel("Time (years)")
+    //     .ylabel("Water demand (mcm3)") ;
+    // var svg = d3.select("#graph-supply").append("svg")
+    //     .datum(data)
+    //     .call(xy_chart) ;
 
 });
+
+
+
 
 
 
