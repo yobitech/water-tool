@@ -31,9 +31,15 @@ function calc_supply(yr) {
 }
 
 function base_bars(N) {
-    var ret = [];
-    for (var i=0; i<N; i++) {
-        ret.push({'Year': i, 'Drinking water': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1})
+    var ret = [{'Year': i, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
+    for (var i=1; i<=N; i++) {
+        ret.push({
+            'Year': i, 
+            'Drinking': ret[i-1].Drinking*1.035, 
+            'Livestock': ret[i-1].Livestock*1.0075, 
+            'Agriculture': ret[i-1].Agriculture*1.01, 
+            'Industry': ret[i-1].Industry*1.015
+        });
     }
     return ret;
 }
