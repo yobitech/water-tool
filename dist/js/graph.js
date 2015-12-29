@@ -99,6 +99,7 @@ function calc_gdp_bars(bars) {
     for (var i=0; i < bars.length; i++) {
         ret.push(calc_gdp(bars[i].Industry, bars[i].Agriculture, bars[i].Livestock));
     }
+    // console.log(ret);
     return ret;
 }
 
@@ -114,6 +115,7 @@ var data_supply = [
         // y: ones
     }
 ];
+// console.log(data_supply)
 
 var data_bars = base_bars(16);
 // data_bars.push(data_supply);
@@ -127,6 +129,7 @@ var data = [
     }, 
 ];
 
+// console.log(data, data_bars, data_supply);
 
 var xy_chart = d3_xy_chart()
     .width(WIDTH)
@@ -141,6 +144,8 @@ function d3_xy_chart() {
     
     function chart(selection) {
         selection.each(function(datasets) {
+
+            // console.log(datasets);
 
             var margin = {top: 20, right: 80, bottom: 30, left: 50}, 
                 innerwidth = width - margin.left - margin.right,
@@ -291,10 +296,17 @@ function d3_xy_bars() {
     function chart(selection) {
         selection.each(function(datasets) {
 
+<<<<<<< HEAD
             console.log(datasets);
 
             var bars_data = datasets.bars,
                 lines_data = datasets.lines;
+=======
+            var data_bars = datasets.bars;
+            var data_lined = datasets.lines;
+
+            // console.log(data_bars, data_lines);
+>>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
 
             var margin = {top: 20, right: 80, bottom: 30, left: 50},
                 innerwidth = width - margin.left - margin.right,
@@ -336,16 +348,30 @@ function d3_xy_bars() {
                 .y(function(d) { return y(d[1]); }) ;
 
 
+<<<<<<< HEAD
             color.domain(d3.keys(bars_data[0]).filter(function(key) { return ['Year', 'ages', 'total'].indexOf(key) < 0; }));
 
             bars_data.forEach(function(d) {
+=======
+            color.domain(d3.keys(data_bars[0]).filter(function(key) { return key !== "Year"; }));
+
+            data_bars.forEach(function(d) {
+>>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 var y0 = 0;
                 d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
                 d.total = d.ages[d.ages.length - 1].y1;
             });
 
+<<<<<<< HEAD
             x.domain(bars_data.map(function(d) { return d.Year; }));
             y.domain([0, d3.max(lines_data, function(d) { return d3.max(d.y)+50;})])
+=======
+            // datasets.sort(function(a, b) { return b.total - a.total; });
+
+            x.domain(data_bars.map(function(d) { return d.Year; }));
+            // y.domain([0, d3.max(datasets, function(d) { return d.total+50; })]);
+            y.domain([0, d3.max(data_supply, function(d) { return d3.max(d.y)+50;})])
+>>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
 
             //
 
@@ -368,7 +394,11 @@ function d3_xy_bars() {
               
 
               var state = svg.selectAll(".state")
+<<<<<<< HEAD
                   .data(bars_data)
+=======
+                  .data(data_bars)
+>>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 .enter().append("g")
                   .attr("class", "g")
                   .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; });
@@ -423,17 +453,25 @@ function d3_xy_bars() {
             // get lines data
 
             var data_lines = svg.selectAll(".d3_xy_chart_line")
+<<<<<<< HEAD
                 .data(lines_data.map(function(d) {return d3.zip(d.x, d.y);}))
+=======
+                .data(data_lined.map(function(d) {return d3.zip(d.x, d.y);}))
+>>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 .enter().append("g")
                 .attr("class", "d3_xy_chart_line") ;
-
+            
             data_lines.append("path")
                 .attr("class", "line")
                 .attr("d", function(d) {return draw_line(d); })
                 .attr("stroke", function(_, i) {return color(i);}) ;
-
+            
             data_lines.append("text")
+<<<<<<< HEAD
                 .datum(function(d, i) { return {name: lines_data[i].label, final: d[d.length-1]}; }) 
+=======
+                .datum(function(d, i) { return {name: data_lined[i].label, final: d[d.length-1]}; }) 
+>>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
                 .attr("transform", function(d) { 
                     return ( "translate(" + x(d.final[0]) + "," + 
                              y(d.final[1]) + ")" ) ; })
@@ -442,7 +480,33 @@ function d3_xy_bars() {
                 .attr("fill", function(_, i) { return color(i); })
                 .text(function(d) { return d.name; }) ;
 
+<<<<<<< HEAD
         }) ;
+=======
+
+            // line stuff
+            // var svg_lines = svg.selectAll(".d3_xy_chart_line")
+            //     .data(data_lines.map(function(d) {return d3.zip(d.x, d.y);}))
+            //     .enter().append("g")
+            //     .attr("class", "d3_xy_chart_line") ;
+
+            // svg_lines.append("path")
+            //     .attr("class", "line")
+            //     .attr("d", function(d) {return draw_line(d); })
+            //     .attr("stroke", function(_, i) {return color(i);}) ;
+
+            // svg_lines.append("text")
+            //     .datum(function(d, i) { return {name: data_lines[i].label, final: d[d.length-1]}; }) 
+            //     .attr("transform", function(d) { 
+            //         return ( "translate(" + x(d.final[0]) + "," + 
+            //                  y(d.final[1]) + ")" ) ; })
+            //     .attr("x", 3)
+            //     .attr("dy", ".35em")
+            //     .attr("fill", function(_, i) { return color(i); })
+            //     .text(function(d) { return d.name; }) ;
+
+                }) ;
+>>>>>>> 68a89960d52850e65170cae2aec5f7399f92edde
     }
 
     chart.width = function(value) {
