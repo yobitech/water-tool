@@ -78,7 +78,8 @@ populate_info(sessionStorage.year_curr);
 // });
 
 
-$('#update-year').click(function () {
+$('#update-year').click(function (e) {
+    e.preventDefault();
     var box_year_val = $('#box-year').val();
     // console.log(box_year_val)
     if (box_year_val < 2015) {
@@ -100,7 +101,8 @@ $('#update-year').click(function () {
 
 
 
-$('#update-rainfall').click(function() {
+$('#update-rainfall').click(function(e) {
+    e.preventDefault();
     
     // update data
     var update_rainfall = slider_rainfall.slider('getValue') / 100;
@@ -133,7 +135,8 @@ $('#update-rainfall').click(function() {
 
 });
 
-$('#update-agriculture').click(function() {
+$('#update-agriculture').click(function(e) {
+    e.preventDefault();
 
     console.log('before', calc_ag_demand(sessionStorage.year_curr, data_crops));
 
