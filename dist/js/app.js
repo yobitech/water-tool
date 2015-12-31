@@ -5,6 +5,24 @@ var slider_rainfall = $('#slider-rainfall').slider({
         return value+'%';
     }
 });
+var slider_chicken = $('#slider-chicken').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+$('#slider-chicken').slider('disable');
+var slider_cattle = $('#slider-cattle').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+$('#slider-cattle').slider('disable');
+var slider_buffalo = $('#slider-buffalo').slider({
+    formatter: function(value) {
+        return value+'%';
+    }
+});
+$('#slider-buffalo').slider('disable');
 var slider_wheat = $('#slider-wheat').slider({
     formatter: function(value) {
         return value+'%';
@@ -30,6 +48,23 @@ var slider_bajra = $('#slider-bajra').slider({
     formatter: function(value) {
         return value+'%';
     }
+});
+
+var irrigation_wheat = $('#irrigation-wheat').slider({
+    min: 0, max: 100, value: [93, 99, 1]
+});
+// $('#irrigation-wheat').css('margin-left', '15px');
+var irrigation_mustard = $('#irrigation-mustard').slider({
+    min: 0, max: 100, value: [55, 99, 1]
+});
+var irrigation_paddy = $('#irrigation-paddy').slider({
+    min: 0, max: 100, value: [100, 100, 100]
+});
+var irrigation_raya = $('#irrigation-raya').slider({
+    min: 0, max: 100, value: [100, 100, 100], range: true
+});
+var irrigation_bajra = $('#irrigation-bajra').slider({
+    min: 0, max: 100, value: [40, 99, 1]
 });
 // $('#ex6').slider({
 //     formatter: function(value) {
@@ -171,9 +206,23 @@ $('#update-agriculture').click(function(e) {
 });
 
 
+$('#details-drinking').click(function () {
+    $('#details-drinking-div').toggle();
+});
 
+$('#details-livestock').click(function () {
+    $('#details-livestock-div').toggle();
+});
 
-
+$('#details-agriculture').click(function () {
+    $('#details-agriculture-div').toggle();
+    if ($('#update-agriculture').prop('disabled')) {
+        $('#update-agriculture').prop('disabled', false);
+    }
+    else {
+        $('#update-agriculture').prop('disabled', true);
+    }
+});
 
 
 

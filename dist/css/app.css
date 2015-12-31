@@ -20,3 +20,67 @@
   fill: none;
   stroke-width: 2.5px;
 }
+
+#irrigation-wheat-data .slider-track-high,
+#irrigation-mustard-data .slider-track-high,
+#irrigation-paddy-data .slider-track-high,
+#irrigation-raya-data .slider-track-high,
+#irrigation-bajra-data .slider-track-high {
+	background: #C0C497;
+}
+
+#irrigation-wheat-data .slider-selection,
+#irrigation-mustard-data .slider-selection,
+#irrigation-paddy-data .slider-selection,
+#irrigation-raya-data .slider-selection,
+#irrigation-bajra-data .slider-selection,
+#irrigation-wheat-data .max-slider-handle,
+#irrigation-mustard-data .max-slider-handle,
+#irrigation-paddy-data .max-slider-handle,
+#irrigation-raya-data .max-slider-handle,
+#irrigation-bajra-data .max-slider-handle,
+#slider-chicken .slider-selection,
+#slider-chicken .slider-handle,
+#slider-cattle .slider-selection,
+#slider-cattle .slider-handle,
+#slider-buffalo .slider-selection,
+#slider-buffalo .slider-handle
+{
+	background: #97C49A;
+}
+
+#irrigation-wheat-data .slider-track-low,
+#irrigation-mustard-data .slider-track-low,
+#irrigation-paddy-data .slider-track-low,
+#irrigation-raya-data .slider-track-low,
+#irrigation-bajra-data .slider-track-low,
+#irrigation-wheat-data .min-slider-handle,
+#irrigation-mustard-data .min-slider-handle,
+#irrigation-paddy-data .min-slider-handle,
+#irrigation-raya-data .min-slider-handle,
+#irrigation-bajra-data .min-slider-handle,
+#slider-rainfall .slider-selection,
+#slider-rainfall .slider-handle {
+	background:#97C0C4 ;
+}
+
+#slider-wheat .slider-selection,
+#slider-paddy .slider-selection,
+#slider-mustard .slider-selection,
+#slider-raya .slider-selection,
+#slider-bajra .slider-selection,
+#slider-wheat .slider-handle,
+#slider-paddy .slider-handle,
+#slider-mustard .slider-handle,
+#slider-raya .slider-handle,
+#slider-bajra .slider-handle {
+	background: #C497AA;
+}
+
+/*button:disabled, 
+button:disabled :hover {
+	background: #333;
+}
+*/
+
+/*div#irrigation-raya*/
