@@ -77,6 +77,10 @@
 	background: #C497AA;
 }
 
+.col-irrigation {
+	padding-right: 0px;
+}
+
 /*button:disabled, 
 button:disabled :hover {
 	background: #333;

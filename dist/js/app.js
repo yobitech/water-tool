@@ -105,6 +105,25 @@ function populate_info(year) {
     slider_raya.slider('setValue', data_crops[year]['r'] / init['r'] * 100);
     slider_bajra.slider('setValue', data_crops[year]['b'] / init['b'] * 100);
     
+    $('#box-wheat-flood').val('93%');
+    $('#box-wheat-rain').val('6%');
+    $('#box-wheat-drip').val('1%');
+
+    $('#box-mustard-flood').val('55%');
+    $('#box-mustard-rain').val('44%');
+    $('#box-mustard-drip').val('1%');
+
+    $('#box-paddy-flood').val('100%');
+    $('#box-paddy-rain').val('0%');
+    $('#box-paddy-drip').val('0%');
+
+    $('#box-raya-flood').val('100%');
+    $('#box-raya-rain').val('0%');
+    $('#box-raya-drip').val('0%');
+
+    $('#box-bajra-flood').val('40%');
+    $('#box-bajra-rain').val('59%');
+    $('#box-bajra-drip').val('1%');
 }
 // $(document).ready( function() {
 sessionStorage.year_curr = $('#box-year').val()-2015;
@@ -226,6 +245,7 @@ $('#details-agriculture').click(function (e) {
         $('#update-agriculture').prop('disabled', true);
     }
 });
+
 
 
 
