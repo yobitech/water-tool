@@ -206,15 +206,18 @@ $('#update-agriculture').click(function(e) {
 });
 
 
-$('#details-drinking').click(function () {
+$('#details-drinking').click(function (e) {
+    e.preventDefault();
     $('#details-drinking-div').toggle();
 });
 
-$('#details-livestock').click(function () {
+$('#details-livestock').click(function (e) {
+    e.preventDefault();
     $('#details-livestock-div').toggle();
 });
 
-$('#details-agriculture').click(function () {
+$('#details-agriculture').click(function (e) {
+    e.preventDefault();
     $('#details-agriculture-div').toggle();
     if ($('#update-agriculture').prop('disabled')) {
         $('#update-agriculture').prop('disabled', false);
