@@ -335,8 +335,12 @@ function d3_xy_bars() {
             var y = d3.scale.linear()
                 .rangeRound([innerheight, 0]);
 
-            var color = d3.scale.ordinal()
-                .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+            var color = d3.scale.category10()
+                // .domain(d3.range(datasets.length))
+            // d3.scale.ordinal()
+                // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+                // .range(['#99CCFF', '#9999FF', '#CC99FF', '#FF99FF', '#FF99CC', '#FF9999', '#FFCC99'])
+                .range(['#97AAC4', '#9A97C4', '#B197C4', '#C497C0', '#C497AA'])
 
             var xAxis = d3.svg.axis()
                 .scale(x)
