@@ -216,6 +216,12 @@ $('#details-livestock').click(function () {
 
 $('#details-agriculture').click(function () {
     $('#details-agriculture-div').toggle();
+    if ($('#update-agriculture').prop('disabled')) {
+        $('#update-agriculture').prop('disabled', false);
+    }
+    else {
+        $('#update-agriculture').prop('disabled', true);
+    }
 });
 
 
