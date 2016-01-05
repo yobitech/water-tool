@@ -226,6 +226,47 @@ var svg_bars = d3.select("#graph-supply").append("svg")
     .datum({'bars': data_bars, 'lines': data_supply})
     .call(xy_bars) ;
 
+function bar_click(d, i) {
+    // console.log(d, i);
+    // get the year
+    var selected_year = i;
+    // load information for the year
+    $('#box-year').val(2015+i);
+    populate_info(selected_year);
+    // if supply < demand
+    // if (data[0].x[selected_year] )
+    // console.log(data_supply[0].y[selected_year], (d.Drinking+d.Livestock+d.Agriculture+d.Industry))
+    var data_year = data_bars[selected_year]
+    if (data_supply[0].y[selected_year] < d.total) {
+
+        // display the agriculture details
+        $('#details-agriculture-div').show();
+        $('#update-agriculture').prop('disabled', false);
+
+        // randomly decrease the values in a cascading manner
+        // data_crops[selected_year]['w'] *= 0.80;
+        // data_crops[selected_year]['m'] *= 0.70;
+        // data_crops[selected_year]['p'] *= 0.60;
+        // data_crops[selected_year]['r'] *= 0.50;
+        // data_crops[selected_year]['b'] *= 0.40;
+        var curr_w = slider_wheat.slider('getValue');
+        var curr_m = slider_mustard.slider('getValue');
+        var curr_p = slider_paddy.slider('getValue');
+        var curr_r = slider_raya.slider('getValue');
+        var curr_b = slider_bajra.slider('getValue');
+
+        // console.log(data_crops[selected_year]);
+
+        slider_wheat.slider('setValue', curr_w * 0.8);
+        slider_mustard.slider('setValue', curr_m * 0.7);
+        slider_paddy.slider('setValue', curr_p * 0.6);
+        slider_raya.slider('setValue', curr_r * 0.5);
+        slider_bajra.slider('setValue', curr_b * 0.4);
+
+        // $('#update-agriculture').click();
+    }
+}
+
 function d3_xy_chart() {
     
     function chart(selection) {
@@ -247,7 +288,7 @@ function d3_xy_chart() {
                 .domain([ d3.min(datasets, function(d) { return d3.min(d.y)-15; }),
                           d3.max(datasets, function(d) { return d3.max(d.y)+15; }) ]) ;
 
-            var color_scale = d3.scale.category10()
+            var color_scale = d3.scale.category20()
                 .domain(d3.range(datasets.length)) ;
 
             var x_axis = d3.svg.axis()
@@ -387,7 +428,7 @@ function d3_xy_bars() {
             var y = d3.scale.linear()
                 .rangeRound([innerheight, 0]);
 
-            var color = d3.scale.category10()
+            var color = d3.scale.category20()
                 .domain(d3.range(datasets.length))
             // d3.scale.ordinal()
                 // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
@@ -448,14 +489,15 @@ function d3_xy_bars() {
                 .attr("class", "y grid")
                 .call(y_grid) ;
 
-            
+            // svg.on('click', bar_click);
               
 
               var state = svg.selectAll(".state")
                   .data(bars_data)
                 .enter().append("g")
                   .attr("class", "g")
-                  .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; });
+                  .attr("transform", function(d) { return "translate(" + x(d.Year) + ",0)"; })
+                  .on('click', bar_click);
 
               state.selectAll("rect")
                   .data(function(d) { return d.ages; })
@@ -463,7 +505,8 @@ function d3_xy_bars() {
                   .attr("width", x.rangeBand())
                   .attr("y", function(d) { return y(d.y1); })
                   .attr("height", function(d) { return y(d.y0) - y(d.y1); })
-                  .style("fill", function(d) { return color(d.name); });
+                  .style("fill", function(d) { return color(d.name); })
+                  ;
 
               var legend = svg.selectAll(".legend")
                   .data(color.domain().slice().reverse())
