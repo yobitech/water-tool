@@ -160,7 +160,9 @@ $('#update-rainfall').click(function(e) {
     
     // update data
     var update_rainfall = slider_rainfall.slider('getValue') / 100;
-    data_rainfall[sessionStorage.year_curr] = update_rainfall * init.rainfall;
+    // console.log('not updated', data_rainfall)
+    data_rainfall[sessionStorage.year_curr] *= update_rainfall;
+    // console.log('updated', data_rainfall)
     $('#box-rainfall').val(parseFloat(data_rainfall[sessionStorage.year_curr]).toFixed(2));
 
     // update graph
@@ -175,6 +177,21 @@ $('#update-rainfall').click(function(e) {
     var svg_bars = d3.select("#graph-supply").append("svg")
         .datum({'bars': data_bars, 'lines': data_supply})
         .call(xy_bars) ;
+
+    console.log('not updated', data[0].y);
+    data[0].y = calc_ecoutput(data_crops, data_rainfall);
+    console.log('updated', data[0].y);
+
+    $('#graph-demand').html("");
+
+    var xy_chart = d3_xy_chart()
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Ec Output") ;
+    var svg = d3.select("#graph-demand").append("svg")
+        .datum(data)
+        .call(xy_chart) ;
 
     // var xy_chart = d3_xy_chart()
     //     // .width(960)
@@ -223,7 +240,7 @@ $('#update-agriculture').click(function(e) {
         .call(xy_bars) ;
 
     // update ec output too
-    data[0].y = calc_ecoutput(data_crops);
+    data[0].y = calc_ecoutput(data_crops, data_rainfall);
 
     $('#graph-demand').html("");
 

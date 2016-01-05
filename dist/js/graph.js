@@ -90,7 +90,7 @@ function calc_gdp_bars(bars) {
 /********************************************************************/
 
 
-function calc_ecoutput(data_crops) {
+function calc_ecoutput(data_crops, data_rainfall) {
 
     // [market price for wheat] * (1 + .08)^year * ( [hectares of wheat that's flood] * [yield for wheat when flooded] + [hectares of wheat that's rain-fed] * [avg yield for wheat] * [winter rainfall / 500 mm] + [hectares of wheat that's drip] * [avg yield of wheat] 
 
@@ -100,9 +100,10 @@ function calc_ecoutput(data_crops) {
         for (c of crop_letters) {
             val += marketprice[c] * Math.pow((1+ annual_inflation_rate),year) * (
                 data_crops[year][c] * percent['f'][c] * productivity[c] + 
-                data_crops[year][c] * percent['r'][c] * productivity[c] * (init.rainfall / 1000 * 0.10 / eto[c]) +
+                data_crops[year][c] * percent['r'][c] * productivity[c] * (data_rainfall[year] / 1000 * 0.10 / eto[c]) +
                 data_crops[year][c] * percent['d'][c] * productivity[c])
         }
+        // console.log(data_rainfall[year], eto[c], data_rainfall[year] / 1000 * 0.10 / eto[c]);
         ret.push(val * 3 / Math.pow(10,6));
     }
     console.log('ecoutput', ret);
@@ -192,7 +193,7 @@ var data = [
         x: base,
         // y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
         // y: calc_gdp_bars(data_bars)
-        y: calc_ecoutput(data_crops)
+        y: calc_ecoutput(data_crops, data_rainfall)
         // y: ones
     }, 
 ];
