@@ -50,22 +50,22 @@ var slider_bajra = $('#slider-bajra').slider({
     }
 });
 
-var irrigation_wheat = $('#irrigation-wheat').slider({
-    min: 0, max: 100, value: [93, 99, 1]
-});
-// $('#irrigation-wheat').css('margin-left', '15px');
-var irrigation_mustard = $('#irrigation-mustard').slider({
-    min: 0, max: 100, value: [55, 99, 1]
-});
-var irrigation_paddy = $('#irrigation-paddy').slider({
-    min: 0, max: 100, value: [100, 100, 100]
-});
-var irrigation_raya = $('#irrigation-raya').slider({
-    min: 0, max: 100, value: [100, 100, 100], range: true
-});
-var irrigation_bajra = $('#irrigation-bajra').slider({
-    min: 0, max: 100, value: [40, 99, 1]
-});
+// var irrigation_wheat = $('#irrigation-wheat').slider({
+//     min: 0, max: 100, value: [93, 99, 1]
+// });
+// // $('#irrigation-wheat').css('margin-left', '15px');
+// var irrigation_mustard = $('#irrigation-mustard').slider({
+//     min: 0, max: 100, value: [55, 99, 1]
+// });
+// var irrigation_paddy = $('#irrigation-paddy').slider({
+//     min: 0, max: 100, value: [100, 100, 100]
+// });
+// var irrigation_raya = $('#irrigation-raya').slider({
+//     min: 0, max: 100, value: [100, 100, 100], range: true
+// });
+// var irrigation_bajra = $('#irrigation-bajra').slider({
+//     min: 0, max: 100, value: [40, 99, 1]
+// });
 // $('#ex6').slider({
 //     formatter: function(value) {
 //         return value+'%';
@@ -188,7 +188,7 @@ $('#update-rainfall').click(function(e) {
         .width(WIDTH)
         .height(HEIGHT)
         .xlabel("Time (years)")
-        .ylabel("Ec Output") ;
+        .ylabel("Economic output") ;
     var svg = d3.select("#graph-demand").append("svg")
         .datum(data)
         .call(xy_chart) ;
@@ -248,7 +248,7 @@ $('#update-agriculture').click(function(e) {
         .width(WIDTH)
         .height(HEIGHT)
         .xlabel("Time (years)")
-        .ylabel("Ec Output") ;
+        .ylabel("Economic output") ;
     var svg = d3.select("#graph-demand").append("svg")
         .datum(data)
         .call(xy_chart) ;

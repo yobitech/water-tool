@@ -4,7 +4,8 @@
 
 var N = 16;
 var base = Array.apply(null, {length: N}).map(Number.call, Number);
-// var base_half = 
+// var base_half = Array.apply(null, {length: N}).map(Number.call+0.5, Number);
+// var base_half = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5, 14.5, 15.5];
 var ones = repeated_array(N, 1);
 var zeros = repeated_array(N, 0);
 var years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
@@ -175,9 +176,10 @@ var data_crops = build_crops(N);
 
 var data_rainfall = repeated_array(N, 446);
 var data_supply = [
-    { label: 'Supply', 
+    { label: '', 
         // x: years,
         x: base,
+        // x: base_half,
         // y: base
         // y: base.map(function (x) {return calc_supply(x)})
         y: calc_supply_wrainfall(data_rainfall)
@@ -190,7 +192,7 @@ var data_bars = base_bars(16);
 // data_bars.push(data_supply);
 
 var data = [ 
-    { label: 'Ec Output', 
+    { label: '', 
         x: base,
         // y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
         // y: calc_gdp_bars(data_bars)
@@ -211,7 +213,7 @@ var xy_chart = d3_xy_chart()
     .width(WIDTH)
     .height(HEIGHT)
     .xlabel("Time (years)")
-    .ylabel("Ec Output") ;
+    .ylabel("Economic output") ;
 var svg = d3.select("#graph-demand").append("svg")
     .datum(data)
     .call(xy_chart) ;
@@ -230,6 +232,7 @@ function bar_click(d, i) {
     // console.log(d, i);
     // get the year
     var selected_year = i;
+    sessionStorage.year_curr = i;
     // load information for the year
     $('#box-year').val(2015+i);
     populate_info(selected_year);
@@ -288,7 +291,7 @@ function d3_xy_chart() {
                 .domain([ d3.min(datasets, function(d) { return d3.min(d.y)-15; }),
                           d3.max(datasets, function(d) { return d3.max(d.y)+15; }) ]) ;
 
-            var color_scale = d3.scale.category20()
+            var color_scale = d3.scale.category10()
                 .domain(d3.range(datasets.length)) ;
 
             var x_axis = d3.svg.axis()
@@ -428,7 +431,7 @@ function d3_xy_bars() {
             var y = d3.scale.linear()
                 .rangeRound([innerheight, 0]);
 
-            var color = d3.scale.category20()
+            var color = d3.scale.category10()
                 .domain(d3.range(datasets.length))
             // d3.scale.ordinal()
                 // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
