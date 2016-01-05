@@ -4,6 +4,7 @@
 
 var N = 16;
 var base = Array.apply(null, {length: N}).map(Number.call, Number);
+// var base_half = 
 var ones = repeated_array(N, 1);
 var zeros = repeated_array(N, 0);
 var years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
