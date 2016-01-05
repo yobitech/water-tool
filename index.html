@@ -40,9 +40,10 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="#">Home</a></li>
-            <li role="presentation"><a href="#">About</a></li>
-            <li role="presentation"><a href="#">Contact</a></li>
+            <li role="presentation"><a href="#">Central</a></li>
+            <li role="presentation"><a href="#">State</a></li>
+            <li role="presentation" id="district-button" class="active"><a href="#">District</a></li>
+            <li role="presentation" id="community-button"><a href="#">Community</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">Water Tool</h3>
@@ -86,7 +87,7 @@
               </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id='drinking-outside-div'>
               <label class="control-label col-sm-3" for="box-drinking">Drinking:</label>
               <div class="col-sm-2"> 
                 <input type="text" class="form-control" id="box-drinking" placeholder="" disabled>
@@ -123,7 +124,7 @@
             </div>
             
 
-            <div class="form-group">
+            <div class="form-group" id='livestock-outside-div'>
               <label class="control-label col-sm-3" for="box-livestock">Livestock:</label>
               <div class="col-sm-2"> 
                 <input type="text" class="form-control" id="box-livestock" placeholder="" disabled>
@@ -300,7 +301,7 @@
 
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id='industry-outside-div'>
               <label class="control-label col-sm-3" for="box-industry">Industry:</label>
               <div class="col-sm-2"> 
                 <input type="text" class="form-control" id="box-industry" placeholder="" disabled>

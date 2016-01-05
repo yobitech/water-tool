@@ -1,3 +1,4 @@
+/*init*/
 var N = 16;
 var base = Array.apply(null, {length: N}).map(Number.call, Number);
 var ones = repeated_array(N, 1);
@@ -9,6 +10,10 @@ var HEIGHT = 250;
 var WIDTH = 500;
 var inputs = [[0,5]];
 var inputs_supply = [[0,5]];
+var init = {'w': 100.536, 'm': 27.760, 'p': 5.986, 'r': 27.760, 'b': 26.159, 
+    'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446};
+
+/* helper functions*/
 
 function repeated_array(n, v) {
     return Array.apply(null, Array(n)).map(Number.prototype.valueOf,v);
@@ -42,10 +47,9 @@ function calc_supply_wrainfall(rfs) {
     return ret;
 }
 
-var init = {'w': 100.536, 'm': 27.760, 'p': 5.986, 'r': 27.760, 'b': 26.159, 
-    'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446};
 
-var data_crops = build_crops(N);
+
+
 
 function build_crops (N) {
     var ret = []
@@ -58,6 +62,10 @@ function build_crops (N) {
     }
     // console.log(ret);
     return ret;
+}
+
+function calc_drinking(consumption, growth, year) {
+    return consumption * 365 / 1000 * 1089000 * pow((1 + growth / 100),year);
 }
 
 
@@ -126,6 +134,8 @@ function calc_gdp_bars(bars) {
     return ret;
 }
 
+/* build data*/
+var data_crops = build_crops(N);
 
 var data_rainfall = repeated_array(N, 446);
 var data_supply = [
@@ -152,6 +162,8 @@ var data = [
     }, 
 ];
 
+
+/*chart*/
 
 
 // console.log(data, data_bars, data_supply);

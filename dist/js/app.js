@@ -246,6 +246,23 @@ $('#details-agriculture').click(function (e) {
     }
 });
 
+$('#district-button').click(function (e) {
+    e.preventDefault();
+    $(this).addClass('active');
+    $('#community-button').removeClass('active');
+    $('#drinking-outside-div').show();
+    $('#livestock-outside-div').show();
+    $('#industry-outside-div').show();
+});
+
+$('#community-button').click(function (e) {
+    e.preventDefault();
+    $(this).addClass('active');
+    $('#district-button').removeClass('active');
+    $('#drinking-outside-div').hide();
+    $('#livestock-outside-div').hide();
+    $('#industry-outside-div').hide();
+});
 
 
 
