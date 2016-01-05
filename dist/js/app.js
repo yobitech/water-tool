@@ -91,6 +91,11 @@ function populate_info(year) {
     $('#box-drinking').val(parseFloat(year_data.Drinking).toFixed(2));
     $('#box-livestock').val(parseFloat(year_data.Livestock).toFixed(2));
     $('#box-agriculture').val(parseFloat(year_data.Agriculture).toFixed(1));
+    // year_data.Agriculture =
+    // var sum_ag = $('#box-wheat').val()+ 
+    // $('#box-agriculture').val(parseFloat(
+    //     data_crops[year]['w']+data_crops[year]['m']+data_crops[year]['p']+
+    //     data_crops[year]['r']+data_crops[year]['b']));
     $('#box-industry').val(parseFloat(year_data.Industry).toFixed(2));
 
     $('#box-wheat').val(parseFloat(data_crops[year]['w']).toFixed(2));
@@ -124,6 +129,9 @@ function populate_info(year) {
     $('#box-bajra-flood').val('40%');
     $('#box-bajra-rain').val('59%');
     $('#box-bajra-drip').val('1%');
+
+    $('#box-growth').val(parseFloat(drinking_numbers.growth[year]).toFixed(2));
+    $('#box-consumption').val(parseFloat(drinking_numbers.consumption[year]).toFixed(2));
 }
 // $(document).ready( function() {
 sessionStorage.year_curr = $('#box-year').val()-2015;
@@ -209,7 +217,7 @@ $('#update-rainfall').click(function(e) {
 $('#update-agriculture').click(function(e) {
     e.preventDefault();
 
-    console.log('before', calc_ag_demand(sessionStorage.year_curr, data_crops));
+    // console.log('before', calc_ag_demand(sessionStorage.year_curr, data_crops));
 
     var update_wheat = slider_wheat.slider('getValue') / 100;
     var update_mustard = slider_mustard.slider('getValue') / 100;
@@ -226,7 +234,7 @@ $('#update-agriculture').click(function(e) {
     populate_info(sessionStorage.year_curr);
 
     data_bars[sessionStorage.year_curr].Agriculture = calc_ag_demand(sessionStorage.year_curr, data_crops);
-    console.log('after', calc_ag_demand(sessionStorage.year_curr, data_crops));
+    // console.log('after', calc_ag_demand(sessionStorage.year_curr, data_crops));
 
     $("#graph-supply").html("");
 
@@ -255,10 +263,51 @@ $('#update-agriculture').click(function(e) {
 
 });
 
+$('#update-drinking').click(function (e) {
+    e.preventDefault();
+    var update_growth = Number($('#box-growth').val());
+    var update_consumption = Number($('#box-consumption').val());
+
+    // console.log(N-sessionStorage.year_curr);
+    // console.log(update_growth);
+
+    // make all following growth/consumption that number
+    drinking_numbers.growth = drinking_numbers.growth
+        .slice(0, sessionStorage.year_curr)
+        .concat(repeated_array(N-sessionStorage.year_curr, update_growth));
+    drinking_numbers.consumption = drinking_numbers.consumption
+        .slice(0, sessionStorage.year_curr)
+        .concat(repeated_array(N-sessionStorage.year_curr, update_consumption));
+
+    populate_info(sessionStorage.year_curr);
+
+    for (var i=sessionStorage.year_curr; i<N; i++) {
+        data_bars[i].Drinking = calc_drinking(drinking_numbers.consumption[i], drinking_numbers.growth[i], i);
+    }
+
+    $("#graph-supply").html("");
+    var xy_bars = d3_xy_bars()
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Water supply (mcm3)") ;
+    var svg_bars = d3.select("#graph-supply").append("svg")
+        .datum({'bars': data_bars, 'lines': data_supply})
+        .call(xy_bars) ;
+
+});
+
+/* show/hide details */
 
 $('#details-drinking').click(function (e) {
     e.preventDefault();
     $('#details-drinking-div').toggle();
+    if ($('#update-drinking').prop('disabled')) {
+        $('#update-drinking').prop('disabled', false);
+    }
+    else {
+        $('#update-drinking').prop('disabled', true);
+    }
 });
 
 $('#details-livestock').click(function (e) {

@@ -30,6 +30,10 @@ var productivity = {'p': 2170, 'b': 930, 'w': 3140, 'm': 1850, 'r': 1152}
 
 var crop_letters = ['w', 'm', 'p', 'r', 'b']
 var annual_inflation_rate = 0.08;
+var drinking_numbers = {
+    'consumption': repeated_array(N, 60),
+    'growth': repeated_array(N, 3.5)
+}
 
 /********************************************************************/
 /*** helper/calc functions ******************************************/
@@ -69,7 +73,8 @@ function calc_supply_wrainfall(rfs) {
 
 
 function calc_drinking(consumption, growth, year) {
-    return consumption * 365 / 1000 * 1089000 * Math.pow((1 + growth / 100),year);
+    // console.log('c', consumption, growth, year, consumption * 365 / 1000 * 1089000 * Math.pow((1 + growth / 100),year));
+    return consumption * 365 / 1000 * 1089000 * Math.pow((1 + growth / 100),year) / Math.pow(10, 6);
 }
 
 function calc_gdp(ind, agr, lstk) {
@@ -156,11 +161,19 @@ function calc_ag_demand(year, data_crops) {
 
 function base_bars(N) {
     // var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': 132, 'Industry': 1}];
-    var ret = [{'Year': 0, 'Drinking': 12, 'Livestock': 3.5, 'Agriculture': calc_ag_demand(0, data_crops), 'Industry': 1}];
+    var ret = [{
+        'Year': 0, 
+        // 'Drinking': 12,
+        'Drinking': calc_drinking(drinking_numbers.consumption[0], drinking_numbers.growth[0], 0), 
+        'Livestock': 3.5, 
+        'Agriculture': calc_ag_demand(0, data_crops), 
+        'Industry': 1
+    }];
     for (var i=1; i<N; i++) {
         ret.push({
             'Year': i, 
-            'Drinking': ret[i-1].Drinking*1.035, 
+            // 'Drinking': ret[i-1].Drinking*1.035,
+            'Drinking': calc_drinking(drinking_numbers.consumption[i], drinking_numbers.growth[i], i), 
             'Livestock': ret[i-1].Livestock*1.0075, 
             // 'Agriculture': ret[i-1].Agriculture*1.01,
             'Agriculture': calc_ag_demand(i, data_crops), 
