@@ -15,6 +15,19 @@ var inputs = [[0,5]];
 var inputs_supply = [[0,5]];
 var init = {'w': 100.536, 'm': 27.760, 'p': 5.986, 'r': 27.760, 'b': 26.159, 
     'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446};
+var percent = {
+    'f': {'w': 0.93,'m': 0.555,'p': 1.0,'r': 1.0,'b': 0.4}, 
+    'r': {'w': 0.06,'m': 0.44,'p': 0.0,'r': 0.0,'b': 0.6975}, 
+    'd': {'w': 0.0,'m': 0.005,'p': 0.0,'r': 0.0,'b': 0.0025}
+}
+var eto = {'w': 0.5, 'm': 0.6, 'p': 0.6, 'r': 0.5, 'b': 0.5};
+// var hectacres = {'w': }
+var marketprice = {'p': 12, 'b': 12, 'w': 15, 'm': 50, 'r': 20}
+// var water_demand = {}
+var productivity = {'p': 2170, 'b': 930, 'w': 3140, 'm': 1850, 'r': 1152}
+
+var crop_letters = ['w', 'm', 'p', 'r', 'b']
+var annual_inflation_rate = 0.08;
 
 /********************************************************************/
 /*** helper/calc functions ******************************************/
@@ -54,7 +67,7 @@ function calc_supply_wrainfall(rfs) {
 
 
 function calc_drinking(consumption, growth, year) {
-    return consumption * 365 / 1000 * 1089000 * pow((1 + growth / 100),year);
+    return consumption * 365 / 1000 * 1089000 * Math.pow((1 + growth / 100),year);
 }
 
 function calc_gdp(ind, agr, lstk) {
@@ -70,13 +83,34 @@ function calc_gdp_bars(bars) {
     return ret;
 }
 
+
+
 /********************************************************************/
 /*** array building functions ***************************************/
 /********************************************************************/
 
 
+function calc_ecoutput(data_crops) {
+
+    // [market price for wheat] * (1 + .08)^year * ( [hectares of wheat that's flood] * [yield for wheat when flooded] + [hectares of wheat that's rain-fed] * [avg yield for wheat] * [winter rainfall / 500 mm] + [hectares of wheat that's drip] * [avg yield of wheat] 
+
+    var ret = [];
+    for (var year=0; year<data_crops.length; year++) {
+        var val = 0;
+        for (c of crop_letters) {
+            val += marketprice[c] * Math.pow((1+ annual_inflation_rate),year) * (
+                data_crops[year][c] * percent['f'][c] * productivity[c] + 
+                data_crops[year][c] * percent['r'][c] * productivity[c] * (init.rainfall / 1000 * 0.10 / eto[c]) +
+                data_crops[year][c] * percent['d'][c] * productivity[c])
+        }
+        ret.push(val * 3 / Math.pow(10,6));
+    }
+    console.log('ecoutput', ret);
+    return ret;
+}
+
 function build_crops (N) {
-    var ret = []
+    var ret = [];
     for (var i=0; i<N; i++) {
         var tmp = {'Year': i};
         for (var c of ['w', 'm', 'p', 'r', 'b']) {
@@ -91,12 +125,6 @@ function build_crops (N) {
 function calc_ag_demand(year, data_crops) {
 
     var meters = {'w': 0.7, 'm': 0.84, 'p': 0.84, 'r': 0.7, 'b': 0.7};
-    var eto = {'w': 0.5, 'm': 0.6, 'p': 0.6, 'r': 0.5, 'b': 0.5};
-    var percent = {
-        'f': {'w': 0.93,'m': 0.555,'p': 1.0,'r': 1.0,'b': 0.4}, 
-        'r': {'w': 0.06,'m': 0.44,'p': 0.0,'r': 0.0,'b': 0.6975}, 
-        'd': {'w': 0.0,'m': 0.005,'p': 0.0,'r': 0.0,'b': 0.0025}
-    }
 
     var AG_ANNUAL_GROWTH = 0.01;
     // var rainfall_t = 0.31;
@@ -110,7 +138,7 @@ function calc_ag_demand(year, data_crops) {
         return tmp;
     }
     else {
-        for (var c of ['w', 'm', 'p', 'r', 'b']) {
+        for (var c of crop_letters) {
             tmp += (data_crops[year][c]-data_crops[year-1][c]) * (percent['f'][c] * meters[c] + percent['r'][c] * init.rainfall_t + percent['d'][c] * eto[c]);
             console.log(c, data_crops[year][c], data_crops[year-1][c]);
         }
@@ -160,10 +188,11 @@ var data_bars = base_bars(16);
 // data_bars.push(data_supply);
 
 var data = [ 
-    { label: 'GDP', 
+    { label: 'Ec Output', 
         x: base,
         // y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
-        y: calc_gdp_bars(data_bars)
+        // y: calc_gdp_bars(data_bars)
+        y: calc_ecoutput(data_crops)
         // y: ones
     }, 
 ];
@@ -180,10 +209,20 @@ var xy_chart = d3_xy_chart()
     .width(WIDTH)
     .height(HEIGHT)
     .xlabel("Time (years)")
-    .ylabel("GDP") ;
+    .ylabel("Ec Output") ;
 var svg = d3.select("#graph-demand").append("svg")
     .datum(data)
     .call(xy_chart) ;
+
+
+var xy_bars = d3_xy_bars()
+    .width(WIDTH)
+    .height(HEIGHT)
+    .xlabel("Time (years)")
+    .ylabel("Water supply (mcm3)") ;
+var svg_bars = d3.select("#graph-supply").append("svg")
+    .datum({'bars': data_bars, 'lines': data_supply})
+    .call(xy_bars) ;
 
 function d3_xy_chart() {
     
@@ -326,15 +365,6 @@ function d3_xy_chart() {
     return chart;
 }
 
-var xy_bars = d3_xy_bars()
-    .width(WIDTH)
-    .height(HEIGHT)
-    .xlabel("Time (years)")
-    .ylabel("Water supply (mcm3)") ;
-var svg_bars = d3.select("#graph-supply").append("svg")
-    .datum({'bars': data_bars, 'lines': data_supply})
-    .call(xy_bars) ;
-
 
 function d3_xy_bars() {
     
@@ -356,11 +386,11 @@ function d3_xy_bars() {
                 .rangeRound([innerheight, 0]);
 
             var color = d3.scale.category10()
-                // .domain(d3.range(datasets.length))
+                .domain(d3.range(datasets.length))
             // d3.scale.ordinal()
                 // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
                 // .range(['#99CCFF', '#9999FF', '#CC99FF', '#FF99FF', '#FF99CC', '#FF9999', '#FFCC99'])
-                .range(['#97AAC4', '#9A97C4', '#B197C4', '#C497C0', '#C497AA'])
+                // .range(['#97AAC4', '#9A97C4', '#B197C4', '#C497C0', '#C497AA'])
 
             var xAxis = d3.svg.axis()
                 .scale(x)

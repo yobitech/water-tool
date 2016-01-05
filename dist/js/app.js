@@ -222,6 +222,20 @@ $('#update-agriculture').click(function(e) {
         .datum({'bars': data_bars, 'lines': data_supply})
         .call(xy_bars) ;
 
+    // update ec output too
+    data[0].y = calc_ecoutput(data_crops);
+
+    $('#graph-demand').html("");
+
+    var xy_chart = d3_xy_chart()
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Ec Output") ;
+    var svg = d3.select("#graph-demand").append("svg")
+        .datum(data)
+        .call(xy_chart) ;
+
 });
 
 
