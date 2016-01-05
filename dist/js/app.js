@@ -169,7 +169,7 @@ $('#update-rainfall').click(function(e) {
     // update data
     var update_rainfall = slider_rainfall.slider('getValue') / 100;
     // console.log('not updated', data_rainfall)
-    data_rainfall[sessionStorage.year_curr] *= update_rainfall;
+    data_rainfall[sessionStorage.year_curr] = update_rainfall * init.rainfall;
     // console.log('updated', data_rainfall)
     $('#box-rainfall').val(parseFloat(data_rainfall[sessionStorage.year_curr]).toFixed(2));
 

@@ -486,7 +486,7 @@ function d3_xy_bars() {
             });
 
             x.domain(bars_data.map(function(d) { return d.Year; }));
-            y.domain([0, d3.max(lines_data, function(d) { return d3.max(d.y)+50;})])
+            y.domain([0, d3.max(lines_data, function(d) { return d3.max(d.y)+70;})])
 
             //
 
