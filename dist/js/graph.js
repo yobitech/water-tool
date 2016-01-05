@@ -1,4 +1,7 @@
-/*init*/
+/********************************************************************/
+/*** initial values *************************************************/
+/********************************************************************/
+
 var N = 16;
 var base = Array.apply(null, {length: N}).map(Number.call, Number);
 var ones = repeated_array(N, 1);
@@ -13,7 +16,9 @@ var inputs_supply = [[0,5]];
 var init = {'w': 100.536, 'm': 27.760, 'p': 5.986, 'r': 27.760, 'b': 26.159, 
     'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446};
 
-/* helper functions*/
+/********************************************************************/
+/*** helper/calc functions ******************************************/
+/********************************************************************/
 
 function repeated_array(n, v) {
     return Array.apply(null, Array(n)).map(Number.prototype.valueOf,v);
@@ -48,7 +53,26 @@ function calc_supply_wrainfall(rfs) {
 }
 
 
+function calc_drinking(consumption, growth, year) {
+    return consumption * 365 / 1000 * 1089000 * pow((1 + growth / 100),year);
+}
 
+function calc_gdp(ind, agr, lstk) {
+    return 4.45*ind+0.48*(agr+lstk);
+}
+
+function calc_gdp_bars(bars) {
+    var ret = [];
+    for (var i=0; i < bars.length; i++) {
+        ret.push(calc_gdp(bars[i].Industry, bars[i].Agriculture, bars[i].Livestock));
+    }
+    // console.log(ret);
+    return ret;
+}
+
+/********************************************************************/
+/*** array building functions ***************************************/
+/********************************************************************/
 
 
 function build_crops (N) {
@@ -63,11 +87,6 @@ function build_crops (N) {
     // console.log(ret);
     return ret;
 }
-
-function calc_drinking(consumption, growth, year) {
-    return consumption * 365 / 1000 * 1089000 * pow((1 + growth / 100),year);
-}
-
 
 function calc_ag_demand(year, data_crops) {
 
@@ -121,19 +140,6 @@ function base_bars(N) {
     return ret;
 }
 
-function calc_gdp(ind, agr, lstk) {
-    return 4.45*ind+0.48*(agr+lstk);
-}
-
-function calc_gdp_bars(bars) {
-    var ret = [];
-    for (var i=0; i < bars.length; i++) {
-        ret.push(calc_gdp(bars[i].Industry, bars[i].Agriculture, bars[i].Livestock));
-    }
-    // console.log(ret);
-    return ret;
-}
-
 /* build data*/
 var data_crops = build_crops(N);
 
@@ -163,7 +169,9 @@ var data = [
 ];
 
 
-/*chart*/
+/********************************************************************/
+/*** chart plotting functions ***************************************/
+/********************************************************************/
 
 
 // console.log(data, data_bars, data_supply);
