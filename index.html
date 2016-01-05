@@ -40,9 +40,10 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="#">Home</a></li>
-            <li role="presentation"><a href="#">About</a></li>
-            <li role="presentation"><a href="#">Contact</a></li>
+            <li role="presentation"><a href="#">Central</a></li>
+            <li role="presentation"><a href="#">State</a></li>
+            <li role="presentation" id="district-button" class="active"><a href="#">District</a></li>
+            <li role="presentation" id="community-button"><a href="#">Community</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">Water Tool</h3>
@@ -74,9 +75,49 @@
               <div class="col-sm-2">
                 <input type="text" class="form-control" id="box-year" value="2015">
               </div>
+              <!-- <button class='btn btn-primary' id='details-drinking' >Details</button> -->
+
+              <!-- <div class="input-group-btn"> -->
+<!--                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Details <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul> -->
+              <!-- </div> -->
+
+
               <button class='btn btn-primary' id='update-year'>Update</button>
+              <br/>
+
+              <div class='col-sm-3'></div>
+              <!--  -->
+              <div>
+                <label class="radio-inline" style='margin-left:20px'><input type="radio" name="optradio" checked>Rabi</label>
+                <label class="radio-inline"><input type="radio" name="optradio">Summer</label>
+                <label class="radio-inline"><input type="radio" name="optradio">Kharif</label>
+              </div>
               <div style='padding:10px'></div>
+
+<div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist" style='margin-left:40px;'>
+    <li role="presentation" class="active"><a href="#breakdowns" aria-controls="home" role="tab" data-toggle="tab">Breakdowns</a></li>
+    <li role="presentation"><a href="#indicators" aria-controls="profile" role="tab" data-toggle="tab">Indicators</a></li>
+    <!-- <li role="presentation"><a href="#policies" aria-controls="messages" role="tab" data-toggle="tab">Policies</a></li> -->
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="breakdowns">
+      
+              <div style='padding:10px'></div>
+
               <div class='row'>
+
                 <div class='col-sm-3 control-label' for='box-rainfall'><p>Rainfall:</p></div>
                 <div class="col-sm-2"> 
                   <input type="text" class="form-control" id="box-rainfall" placeholder="60%" disabled>
@@ -84,9 +125,8 @@
                 <div class='col-sm-5'><input id="slider-rainfall" data-slider-id='slider-rainfall' type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="100"/></div>
                 <div class='col-sm-1'><button class='btn btn-primary' id='update-rainfall'>Update</button></div>
               </div>
-            </div>
-
-            <div class="form-group">
+              <div style='padding:5px'></div>
+            <div class="form-group" id='drinking-outside-div'>
               <label class="control-label col-sm-3" for="box-drinking">Drinking:</label>
               <div class="col-sm-2"> 
                 <input type="text" class="form-control" id="box-drinking" placeholder="" disabled>
@@ -94,14 +134,13 @@
               <button class='btn btn-primary' id='details-drinking' >Details</button>
               <button class='btn btn-primary' id='update-drinking' disabled>Update</button>
             </div>
-            <!-- <div style='padding:10px'></div> -->
+
             <div id='details-drinking-div' hidden>
               <div class='row'>
                 <div class='col-sm-3 control-label'><p>Population:</p></div>
                 <div class="col-sm-2"> 
                   <input type="text" class="form-control" id="box-population" placeholder="" value="1,089,000" disabled>
                 </div>
-                <!-- <div class='col-sm-6'><input id="slider-wheat" data-slider-id='slider-wheat' type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="100"/><input id="irrigation-wheat" data-slider-id='irrigation-wheat-data' type="text" /><br/></div> -->
                 
               </div>
               <div class='row'>
@@ -115,15 +154,13 @@
                 <div class="col-sm-2"> 
                   <input type="text" class="form-control" id="box-consumption" placeholder="" value="60">
                 </div>
-                <!-- <div class='col-sm-6'><input id="slider-mustard" data-slider-id='slider-mustard' type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="100"/><input id="irrigation-mustard" data-slider-id='irrigation-mustard-data' type="text" /><br/></div> -->
                 
               </div>
 
               <div style='padding:10px'></div>
             </div>
-            
 
-            <div class="form-group">
+            <div class="form-group" id='livestock-outside-div'>
               <label class="control-label col-sm-3" for="box-livestock">Livestock:</label>
               <div class="col-sm-2"> 
                 <input type="text" class="form-control" id="box-livestock" placeholder="" disabled>
@@ -159,10 +196,7 @@
               <div style='padding:10px'></div>
             </div>
 
-
-
-
-            <div class="form-group">
+                        <div class="form-group">
               <label class="control-label col-sm-3" for="box-agriculture">Agriculture:</label>
               <div class="col-sm-2"> 
                 <input type="text" class="form-control" id="box-agriculture" placeholder="" disabled>
@@ -300,7 +334,7 @@
 
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id='industry-outside-div'>
               <label class="control-label col-sm-3" for="box-industry">Industry:</label>
               <div class="col-sm-2"> 
                 <input type="text" class="form-control" id="box-industry" placeholder="" disabled>
@@ -309,91 +343,99 @@
               <button class='btn btn-primary' id='update-industry' disabled>Update</button>
             </div>
 
-            <!-- <div class="form-group">
-              <label class="control-label col-sm-4" for="pwd">Irrigation split:</label>
-              <div class="col-sm-2"> 
-                <input type="password" class="form-control" id="pwd" placeholder="10%" disabled>
-              </div>
-              <button class='btn btn-primary' id='update-year'>Update</button>
 
-              <input id="ex16b" type="text"/>
-              <div style='padding:10px'></div>
-              <div class='row'>
-                <div class='col-sm-4 control-label'><p>Drip irrigation:</p></div>
-                <div class='col-sm-6'><input id="ex4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="5"/></div>
-              </div>
-              <div class='row'>
-                <div class='col-sm-4 control-label'><p>Flood irrigation:</p></div>
-                <div class='col-sm-6'><input id="ex5" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="30"/></div>
-              </div>
-              <div class='row'>
-                <div class='col-sm-4 control-label'><p>Rain fed irrigation:</p></div>
-                <div class='col-sm-6'><input id="ex6" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="65"/></div>
-              </div>
 
-            </div> -->
-          </form>
 
-          <!-- <form class="form-inline" role="form">
-            <div class="form-group">
-              <label for="email"><h4>Year:</h4></label>
-              <input type="email" class="form-control" id="email" placeholder='2015'>
+
+    </div>
+
+
+
+
+
+
+    <div role="tabpanel" class="tab-pane" id="indicators">
+
+      <div style="padding:10px"></div>
+
+      <table class='table' style='margin-left:50px; width:80%'>
+
+        <tr>
+          <th>Indicator</th>
+          <th>INR</th>
+          <th>USD</th>
+        </tr>
+
+        <tr>
+          <td>PCI</td>
+          <td>45,934</td>
+          <td>685</td>
+        </tr>
+
+        <tr>
+          <td>GDP/Total ha</td>
+          <td>2.7 lakhs</td>
+          <td>4,090</td>
+        </tr>
+
+        <tr>
+          <td>GDP/Cultivated ha</td>
+          <td>3.4 lakhs</td>
+          <td>5,188</td>
+        </tr>
+
+        <tr>
+          <td>GDP/Irrigated ha</td>
+          <td>4.6 lakhs</td>
+          <td>7,037</td>
+        </tr>
+
+        <tr>
+          <td>GDP/m3</td>
+          <td>35,728</td>
+          <td>541</td>
+        </tr>
+
+        <tr>
+          <td>GDP/kWh</td>
+          <td>28.2</td>
+          <td>0.43</td>
+        </tr>
+
+        <tr>
+          <td>GDP Vol</td>
+          <td>6.6%</td>
+          <td></td>
+        </tr>
+
+      </table>
+
+    
+    <!-- PCI: INR 45,934 ($685)
+GDP/Total ha: INR 2.7 lakhs ($4,090)
+GDP/Cultivated ha: INR 3.4 lakhs ($5,188)
+GDP/Irrigated ha: INR 4.6 lakhs ($7,037)
+GDP/m3: INR 35,728 ($541)
+GDP/kWh: INR 28.2 ($0.43)
+GDP vol: 6.6% -->
+
+
+    </div>
+    <!-- <div role="tabpanel" class="tab-pane" id="policies">.!.</div> -->
+  </div>
+
+</div>
+
+
             </div>
+
+
+            <!-- <div style='padding:10px'></div> -->
+            
+            
+
+          
           </form>
-
-          <form class="form-inline" role="form">
-            <div class="form-group">
-              <label for="email"><h4>Water consumption:</h4></label>
-              <input type="email" class="form-control" id="email" placeholder='30%' disabled>
-            </div>
-          </form> -->
-
-
-
-<!--           <h4>Agricultural split</h4>
-
-
-
-          <h4>Type of irrigation</h4> -->
-
-
-          <!-- <h4>Year: <input type='number' name='input-year-supply' id='input-year-supply' class='form-control' placeholder='5'></h4> -->
-
-
-          <!-- <div>
-            <h4>Water Supply</h4>
-            <p>Change the parameters to see how it affects water demand!</p>
-
-            <table class="table" id='input-table-supply'>
-              <thead>
-                <tr>
-                  <th>Year</th>
-                  <th>Rainfall</th>
-                  <th>??</th>
-                  <th>??</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td scope="row">0</td>
-                  <td>5</td>
-                  <td>30</td>
-                  <td>65</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td><input type='number' name='input-year-supply' id='input-year-supply' class='form-control' placeholder='5'></th>
-                  <td><input type='number' name='input-drip-supply' id='input-drip-supply' class='form-control' placeholder='10'></td>
-                  <td><input type='number' name='input-flood-supply' id='input-flood-supply' class='form-control' placeholder='' disabled></td>
-                  <td><input type='number' name='input-rain-supply' id='input-rain-supply' class='form-control' placeholder='' disabled></td>
-                </tr>
-              </tfoot>
-            </table>
-            <button class='btn btn-primary' id='rainfall-update'>Add new policy</button>
-            <button class='btn btn-primary' id='plot-update-supply'>Plot policy</button>
-          </div>
-        </div> -->
       </div>
     <!-- </div> /container -->
 
@@ -402,6 +444,7 @@
     <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
   </body>
   <script src="dist/js/jquery.js"></script>
+   <script src="dist/js/bootstrap.js"></script>
   <script src="http://d3js.org/d3.v3.js"></script>
   <script src="dist/js/bootstrap-slider.min.js"></script>
   <script src="dist/js/graph.js"></script>

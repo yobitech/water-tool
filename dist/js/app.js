@@ -50,22 +50,22 @@ var slider_bajra = $('#slider-bajra').slider({
     }
 });
 
-var irrigation_wheat = $('#irrigation-wheat').slider({
-    min: 0, max: 100, value: [93, 99, 1]
-});
-// $('#irrigation-wheat').css('margin-left', '15px');
-var irrigation_mustard = $('#irrigation-mustard').slider({
-    min: 0, max: 100, value: [55, 99, 1]
-});
-var irrigation_paddy = $('#irrigation-paddy').slider({
-    min: 0, max: 100, value: [100, 100, 100]
-});
-var irrigation_raya = $('#irrigation-raya').slider({
-    min: 0, max: 100, value: [100, 100, 100], range: true
-});
-var irrigation_bajra = $('#irrigation-bajra').slider({
-    min: 0, max: 100, value: [40, 99, 1]
-});
+// var irrigation_wheat = $('#irrigation-wheat').slider({
+//     min: 0, max: 100, value: [93, 99, 1]
+// });
+// // $('#irrigation-wheat').css('margin-left', '15px');
+// var irrigation_mustard = $('#irrigation-mustard').slider({
+//     min: 0, max: 100, value: [55, 99, 1]
+// });
+// var irrigation_paddy = $('#irrigation-paddy').slider({
+//     min: 0, max: 100, value: [100, 100, 100]
+// });
+// var irrigation_raya = $('#irrigation-raya').slider({
+//     min: 0, max: 100, value: [100, 100, 100], range: true
+// });
+// var irrigation_bajra = $('#irrigation-bajra').slider({
+//     min: 0, max: 100, value: [40, 99, 1]
+// });
 // $('#ex6').slider({
 //     formatter: function(value) {
 //         return value+'%';
@@ -160,7 +160,9 @@ $('#update-rainfall').click(function(e) {
     
     // update data
     var update_rainfall = slider_rainfall.slider('getValue') / 100;
-    data_rainfall[sessionStorage.year_curr] = update_rainfall * init.rainfall;
+    // console.log('not updated', data_rainfall)
+    data_rainfall[sessionStorage.year_curr] *= update_rainfall;
+    // console.log('updated', data_rainfall)
     $('#box-rainfall').val(parseFloat(data_rainfall[sessionStorage.year_curr]).toFixed(2));
 
     // update graph
@@ -175,6 +177,21 @@ $('#update-rainfall').click(function(e) {
     var svg_bars = d3.select("#graph-supply").append("svg")
         .datum({'bars': data_bars, 'lines': data_supply})
         .call(xy_bars) ;
+
+    console.log('not updated', data[0].y);
+    data[0].y = calc_ecoutput(data_crops, data_rainfall);
+    console.log('updated', data[0].y);
+
+    $('#graph-demand').html("");
+
+    var xy_chart = d3_xy_chart()
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Ec Output") ;
+    var svg = d3.select("#graph-demand").append("svg")
+        .datum(data)
+        .call(xy_chart) ;
 
     // var xy_chart = d3_xy_chart()
     //     // .width(960)
@@ -222,6 +239,20 @@ $('#update-agriculture').click(function(e) {
         .datum({'bars': data_bars, 'lines': data_supply})
         .call(xy_bars) ;
 
+    // update ec output too
+    data[0].y = calc_ecoutput(data_crops, data_rainfall);
+
+    $('#graph-demand').html("");
+
+    var xy_chart = d3_xy_chart()
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Ec Output") ;
+    var svg = d3.select("#graph-demand").append("svg")
+        .datum(data)
+        .call(xy_chart) ;
+
 });
 
 
@@ -246,6 +277,23 @@ $('#details-agriculture').click(function (e) {
     }
 });
 
+$('#district-button').click(function (e) {
+    e.preventDefault();
+    $(this).addClass('active');
+    $('#community-button').removeClass('active');
+    $('#drinking-outside-div').show();
+    $('#livestock-outside-div').show();
+    $('#industry-outside-div').show();
+});
+
+$('#community-button').click(function (e) {
+    e.preventDefault();
+    $(this).addClass('active');
+    $('#district-button').removeClass('active');
+    $('#drinking-outside-div').hide();
+    $('#livestock-outside-div').hide();
+    $('#industry-outside-div').hide();
+});
 
 
 
