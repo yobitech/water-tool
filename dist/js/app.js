@@ -132,6 +132,8 @@ function populate_info(year) {
 
     $('#box-growth').val(parseFloat(drinking_numbers.growth[year]).toFixed(2));
     $('#box-consumption').val(parseFloat(drinking_numbers.consumption[year]).toFixed(2));
+
+    $('#box-err').val(init.err);
 }
 // $(document).ready( function() {
 sessionStorage.year_curr = $('#box-year').val()-2015;
@@ -186,9 +188,9 @@ $('#update-rainfall').click(function(e) {
         .datum({'bars': data_bars, 'lines': data_supply})
         .call(xy_bars) ;
 
-    console.log('not updated', data[0].y);
+    // console.log('not updated', data[0].y);
     data[0].y = calc_ecoutput(data_crops, data_rainfall);
-    console.log('updated', data[0].y);
+    // console.log('updated', data[0].y);
 
     $('#graph-demand').html("");
 
@@ -294,6 +296,29 @@ $('#update-drinking').click(function (e) {
     var svg_bars = d3.select("#graph-supply").append("svg")
         .datum({'bars': data_bars, 'lines': data_supply})
         .call(xy_bars) ;
+
+});
+
+$('#update-err').click(function (e) {
+    e.preventDefault();
+    var update_err = Number($('#box-err').val());
+
+    init.err = update_err;
+    
+    for (var i=0; i<N; i++) {
+        data_bars[i].Error = update_err;
+    }
+
+    $("#graph-supply").html("");
+    var xy_bars = d3_xy_bars()
+        .width(WIDTH)
+        .height(HEIGHT)
+        .xlabel("Time (years)")
+        .ylabel("Water supply (mcm3)") ;
+    var svg_bars = d3.select("#graph-supply").append("svg")
+        .datum({'bars': data_bars, 'lines': data_supply})
+        .call(xy_bars) ;
+
 
 });
 
