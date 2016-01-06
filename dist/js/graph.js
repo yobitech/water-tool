@@ -97,7 +97,7 @@ function calc_gdp_bars(bars) {
 /********************************************************************/
 
 
-function calc_ecoutput(data_crops, data_rainfall) {
+function calc_ecoutput(data_crops, data_rainfall, data_irrigation) {
 
     // [market price for wheat] * (1 + .08)^year * ( [hectares of wheat that's flood] * [yield for wheat when flooded] + [hectares of wheat that's rain-fed] * [avg yield for wheat] * [winter rainfall / 500 mm] + [hectares of wheat that's drip] * [avg yield of wheat] 
 
@@ -106,9 +106,9 @@ function calc_ecoutput(data_crops, data_rainfall) {
         var val = 0;
         for (c of crop_letters) {
             val += marketprice[c] * Math.pow((1+ annual_inflation_rate),year) * (
-                data_crops[year][c] * percent['f'][c] * productivity[c] + 
-                data_crops[year][c] * percent['r'][c] * productivity[c] * (data_rainfall[year] / 1000 * 0.10 / eto[c]) +
-                data_crops[year][c] * percent['d'][c] * productivity[c])
+                data_crops[year][c] * data_irrigation[year]['f'][c] * productivity[c] + 
+                data_crops[year][c] * data_irrigation[year]['r'][c] * productivity[c] * (data_rainfall[year] / 1000 * 0.10 / eto[c]) +
+                data_crops[year][c] * data_irrigation[year]['d'][c] * productivity[c])
         }
         // console.log(data_rainfall[year], eto[c], data_rainfall[year] / 1000 * 0.10 / eto[c]);
         ret.push(val * 3 / Math.pow(10,6));
@@ -130,7 +130,7 @@ function build_crops (N) {
     return ret;
 }
 
-function calc_ag_demand(year, data_crops) {
+function calc_ag_demand(year, data_crops, data_irrigation) {
 
     var meters = {'w': 0.7, 'm': 0.84, 'p': 0.84, 'r': 0.7, 'b': 0.7};
 
@@ -147,7 +147,10 @@ function calc_ag_demand(year, data_crops) {
     }
     else {
         for (var c of crop_letters) {
-            tmp += (data_crops[year][c]-data_crops[year-1][c]) * (percent['f'][c] * meters[c] + percent['r'][c] * init.rainfall_t + percent['d'][c] * eto[c]);
+            tmp += (data_crops[year][c]-data_crops[year-1][c]) * (
+                data_irrigation[year]['f'][c] * meters[c] + 
+                data_irrigation[year]['r'][c] * init.rainfall_t + 
+                data_irrigation[year]['d'][c] * eto[c]);
             // console.log(c, data_crops[year][c], data_crops[year-1][c]);
         }
         // console.log('tmpafter', tmp);
@@ -166,7 +169,7 @@ function base_bars(N) {
         // 'Drinking': 12,
         'Drinking': calc_drinking(drinking_numbers.consumption[0], drinking_numbers.growth[0], 0), 
         'Livestock': 3.5, 
-        'Agriculture': calc_ag_demand(0, data_crops), 
+        'Agriculture': calc_ag_demand(0, data_crops, data_irrigation), 
         'Industry': 1,
         'Error': init.err
     }];
@@ -177,7 +180,7 @@ function base_bars(N) {
             'Drinking': calc_drinking(drinking_numbers.consumption[i], drinking_numbers.growth[i], i), 
             'Livestock': ret[i-1].Livestock*1.0075, 
             // 'Agriculture': ret[i-1].Agriculture*1.01,
-            'Agriculture': calc_ag_demand(i, data_crops), 
+            'Agriculture': calc_ag_demand(i, data_crops, data_irrigation), 
             'Industry': ret[i-1].Industry*1.015,
             'Error': init.err
         });
@@ -186,7 +189,18 @@ function base_bars(N) {
     return ret;
 }
 
+function build_irrigation(N) {
+    var ret = [];
+    for (var i=0; i<N; i++) {
+        // var tmp = percent.slice();
+        var tmp = jQuery.extend(true, {}, percent);
+        ret.push(tmp);
+    }
+    return ret;
+}
+
 /* build data*/
+var data_irrigation = build_irrigation(N);
 var data_crops = build_crops(N);
 
 var data_rainfall = repeated_array(N, 446);
@@ -211,10 +225,12 @@ var data = [
         x: base,
         // y: [12, 31, 50, 26, 72, 35, 49, 81, 43, 32, 57, 63, 26, 61, 70, 52]
         // y: calc_gdp_bars(data_bars)
-        y: calc_ecoutput(data_crops, data_rainfall)
+        y: calc_ecoutput(data_crops, data_rainfall, data_irrigation)
         // y: ones
     }, 
 ];
+
+
 
 
 /********************************************************************/

@@ -110,25 +110,32 @@ function populate_info(year) {
     slider_raya.slider('setValue', data_crops[year]['r'] / init['r'] * 100);
     slider_bajra.slider('setValue', data_crops[year]['b'] / init['b'] * 100);
     
-    $('#box-wheat-flood').val('93%');
-    $('#box-wheat-rain').val('6%');
-    $('#box-wheat-drip').val('1%');
+    for (irr of ['f', 'r', 'd']) {
+        for (crop of ['w', 'm', 'p', 'r', 'b']) {
+            // data_irrigation[irr][crop] = Number($('#box-'+crop+'-'+irr).val())
+            $('#box-'+crop+'-'+irr).val(data_irrigation[sessionStorage.year_curr][irr][crop]);
+        }
+    }
 
-    $('#box-mustard-flood').val('55%');
-    $('#box-mustard-rain').val('44%');
-    $('#box-mustard-drip').val('1%');
+    // $('#box-wheat-flood').val('93%');
+    // $('#box-wheat-rain').val('6%');
+    // $('#box-wheat-drip').val('1%');
 
-    $('#box-paddy-flood').val('100%');
-    $('#box-paddy-rain').val('0%');
-    $('#box-paddy-drip').val('0%');
+    // $('#box-mustard-flood').val('55%');
+    // $('#box-mustard-rain').val('44%');
+    // $('#box-mustard-drip').val('1%');
 
-    $('#box-raya-flood').val('100%');
-    $('#box-raya-rain').val('0%');
-    $('#box-raya-drip').val('0%');
+    // $('#box-paddy-flood').val('100%');
+    // $('#box-paddy-rain').val('0%');
+    // $('#box-paddy-drip').val('0%');
 
-    $('#box-bajra-flood').val('40%');
-    $('#box-bajra-rain').val('59%');
-    $('#box-bajra-drip').val('1%');
+    // $('#box-raya-flood').val('100%');
+    // $('#box-raya-rain').val('0%');
+    // $('#box-raya-drip').val('0%');
+
+    // $('#box-bajra-flood').val('40%');
+    // $('#box-bajra-rain').val('59%');
+    // $('#box-bajra-drip').val('1%');
 
     $('#box-growth').val(parseFloat(drinking_numbers.growth[year]).toFixed(2));
     $('#box-consumption').val(parseFloat(drinking_numbers.consumption[year]).toFixed(2));
@@ -189,7 +196,7 @@ $('#update-rainfall').click(function(e) {
         .call(xy_bars) ;
 
     // console.log('not updated', data[0].y);
-    data[0].y = calc_ecoutput(data_crops, data_rainfall);
+    data[0].y = calc_ecoutput(data_crops, data_rainfall, data_irrigation);
     // console.log('updated', data[0].y);
 
     $('#graph-demand').html("");
@@ -227,6 +234,13 @@ $('#update-agriculture').click(function(e) {
     var update_raya = slider_raya.slider('getValue') / 100;
     var update_bajra = slider_bajra.slider('getValue') / 100;
 
+    // data_irrigation[sessionStorage.year_curr]['']
+    for (irr of ['f', 'r', 'd']) {
+        for (crop of ['w', 'm', 'p', 'r', 'b']) {
+            data_irrigation[sessionStorage.year_curr][irr][crop] = Number($('#box-'+crop+'-'+irr).val())
+        }
+    }
+
     data_crops[sessionStorage.year_curr]['w'] = update_wheat * init['w'];
     data_crops[sessionStorage.year_curr]['m'] = update_mustard * init['m'];
     data_crops[sessionStorage.year_curr]['p'] = update_paddy * init['p'];
@@ -235,7 +249,7 @@ $('#update-agriculture').click(function(e) {
 
     populate_info(sessionStorage.year_curr);
 
-    data_bars[sessionStorage.year_curr].Agriculture = calc_ag_demand(sessionStorage.year_curr, data_crops);
+    data_bars[sessionStorage.year_curr].Agriculture = calc_ag_demand(sessionStorage.year_curr, data_crops, data_irrigation);
     // console.log('after', calc_ag_demand(sessionStorage.year_curr, data_crops));
 
     $("#graph-supply").html("");
@@ -250,7 +264,7 @@ $('#update-agriculture').click(function(e) {
         .call(xy_bars) ;
 
     // update ec output too
-    data[0].y = calc_ecoutput(data_crops, data_rainfall);
+    data[0].y = calc_ecoutput(data_crops, data_rainfall, data_irrigation);
 
     $('#graph-demand').html("");
 
