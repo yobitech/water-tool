@@ -16,7 +16,7 @@ var WIDTH = 500;
 var inputs = [[0,5]];
 var inputs_supply = [[0,5]];
 var init = {'w': 100.536, 'm': 27.760, 'p': 5.986, 'r': 27.760, 'b': 26.159, 
-    'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446};
+    'waterdemand': 132, 'rainfall_t': 0.31, 'rainfall': 446, 'err': 20};
 var percent = {
     'f': {'w': 0.93,'m': 0.555,'p': 1.0,'r': 1.0,'b': 0.4}, 
     'r': {'w': 0.06,'m': 0.44,'p': 0.0,'r': 0.0,'b': 0.6975}, 
@@ -167,7 +167,8 @@ function base_bars(N) {
         'Drinking': calc_drinking(drinking_numbers.consumption[0], drinking_numbers.growth[0], 0), 
         'Livestock': 3.5, 
         'Agriculture': calc_ag_demand(0, data_crops), 
-        'Industry': 1
+        'Industry': 1,
+        'Error': init.err
     }];
     for (var i=1; i<N; i++) {
         ret.push({
@@ -177,7 +178,8 @@ function base_bars(N) {
             'Livestock': ret[i-1].Livestock*1.0075, 
             // 'Agriculture': ret[i-1].Agriculture*1.01,
             'Agriculture': calc_ag_demand(i, data_crops), 
-            'Industry': ret[i-1].Industry*1.015
+            'Industry': ret[i-1].Industry*1.015,
+            'Error': init.err
         });
     }
     // console.log(ret);
